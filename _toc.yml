@@ -1,0 +1,6 @@
+format: jb-book
+root: 0_intro
+chapters:
+  - file: 1_understanding_ac_power.ipynb
+  - file: 2_what_is_a_phasor.ipynb
+  - file: 3_life_with_and_without_phasors.ipynb

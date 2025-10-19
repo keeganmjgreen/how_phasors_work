@@ -1,0 +1,7 @@
+title: How Phasors Work
+author: Keegan Green
+execute:
+  execute_notebooks: force
+latex:
+  latex_documents:
+    targetname: book.tex
