@@ -29,5 +29,6 @@
         "tableofcontents",
         "targetname",
         "usetex"
-    ]
+    ],
+    "editor.rulers": [],
 }
