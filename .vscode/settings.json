@@ -12,6 +12,7 @@
         "keeganmjgreen",
         "lambdify",
         "linestyle",
+        "markersize",
         "mathbb",
         "mathbf",
         "mathcal",
@@ -28,7 +29,11 @@
         "sympy",
         "tableofcontents",
         "targetname",
-        "usetex"
+        "textcoords",
+        "usetex",
+        "xlim",
+        "xytext",
+        "ylim"
     ],
     "editor.rulers": [],
 }
