@@ -7,7 +7,7 @@ The latest HTML version of this book is available at: <br>
 
 The latest PDF version is available at: <br>
 
-[https://github.com/keeganmjgreen/how_phasors_work/blob/main/how_phasors_work.pdf](https://raw.githubusercontent.com/keeganmjgreen/how_phasors_work/refs/heads/main/how_phasors_work.pdf)
+[github.com/keeganmjgreen/how_phasors_work/blob/main/how_phasors_work.pdf](https://raw.githubusercontent.com/keeganmjgreen/how_phasors_work/refs/heads/main/how_phasors_work.pdf)
 ```
 
 ```{tableofcontents}
