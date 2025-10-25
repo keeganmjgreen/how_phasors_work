@@ -1,10 +1,15 @@
 {
     "cSpell.words": [
         "arctan",
+        "arrowprops",
+        "arrowstyle",
         "bigg",
         "checkodesol",
         "dsolve",
         "evalf",
+        "figclass",
+        "figsize",
+        "hspace",
         "infty",
         "integro",
         "ipynb",
