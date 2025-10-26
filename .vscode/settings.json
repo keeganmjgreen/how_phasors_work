@@ -5,6 +5,7 @@
         "arrowstyle",
         "bigg",
         "checkodesol",
+        "connectionstyle",
         "dsolve",
         "evalf",
         "figclass",
@@ -23,6 +24,7 @@
         "mathcal",
         "mathrm",
         "matplotlib",
+        "ncols",
         "numer",
         "numpy",
         "ofst",
@@ -37,9 +39,14 @@
         "textcoords",
         "textit",
         "usetex",
+        "xlabel",
         "xlim",
+        "xticklabels",
+        "xticks",
         "xytext",
-        "ylim"
+        "ylabel",
+        "ylim",
+        "yticks"
     ],
     "editor.rulers": [],
 }
