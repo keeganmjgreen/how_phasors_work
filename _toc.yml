@@ -4,4 +4,4 @@ chapters:
   - file: 1_introduction.ipynb
   - file: 2_what_is_a_phasor.ipynb
   - file: 3_life_with_and_without_phasors.ipynb
-  - file: 4_power_factor_and_the_power_triangle.ipynb
+  - file: 4_complex_power_and_the_power_factor.ipynb
