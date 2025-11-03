@@ -4,6 +4,8 @@
         "arrowprops",
         "arrowstyle",
         "bigg",
+        "bigl",
+        "bigr",
         "checkodesol",
         "connectionstyle",
         "dsolve",
