@@ -19,6 +19,7 @@
         "ipynb",
         "Keegan",
         "keeganmjgreen",
+        "Labelable",
         "lambdify",
         "linestyle",
         "longrightarrow",
@@ -29,12 +30,15 @@
         "mathrm",
         "matplotlib",
         "ncols",
+        "ndarray",
         "numer",
         "numpy",
         "ofst",
         "pdflatex",
         "phasor",
         "Phasors",
+        "pycache",
+        "pydantic",
         "schemdraw",
         "scriptsize",
         "supernode",
@@ -55,4 +59,8 @@
         "yticks"
     ],
     "editor.rulers": [],
+    "files.exclude": {
+        "**/__pycache__": true
+    },
+    "python.analysis.typeCheckingMode": "standard"
 }
