@@ -134,12 +134,12 @@ class Segment(_Rotatable, _Drawable):
             ),
         )
 
-    def drawn(self, ax: Axes) -> Self:
+    def drawn(self, ax: Axes, linewidth: float = 0.5) -> Self:
         ax.annotate(
             "",
             xytext=self.start._xy,
             xy=self.end._xy,
-            arrowprops=dict(arrowstyle=self._arrowstyle, linewidth=0.5),
+            arrowprops=dict(arrowstyle=self._arrowstyle, linewidth=linewidth),
         )
         return self
 
@@ -187,12 +187,12 @@ class Arc(_Rotatable, _Drawable, _Labelable):
             label_radius=self.label_radius,
         )
 
-    def drawn(self, ax: Axes) -> Self:
+    def drawn(self, ax: Axes, linewidth: float = 0.5) -> Self:
         ax.plot(
             self.vertex.x + self.radius * np.cos(self.angles),
             self.vertex.y + self.radius * np.sin(self.angles),
             "k",
-            linewidth=0.5,
+            linewidth=linewidth,
         )
         return self
 
