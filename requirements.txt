@@ -1,6 +1,6 @@
-jupyter-book
-matplotlib
-numpy
-pydantic
-schemdraw
-sympy
+jupyter-book<2
+matplotlib<4
+numpy<3
+pydantic<3
+schemdraw<1
+sympy<2
