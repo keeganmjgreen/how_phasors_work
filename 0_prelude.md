@@ -1,6 +1,6 @@
 # How Phasors Work
 
-<!-- ![](img/cover.png) -->
+![](img/cover.png)
 
 *Cover image by Adam Hilles on Unsplash.*
 
