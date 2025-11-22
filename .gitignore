@@ -1,2 +1,4 @@
 __pycache__/*
 _build/
+cover/img/
+todos.txt
