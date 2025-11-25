@@ -79,6 +79,12 @@ class Point(_Drawable, _Labelable):
         self._label(ax, self, text, offset, ha)
         return self
 
+    def __add__(self, other: Point) -> Point:
+        return Point(
+            x=(self.x + other.x),
+            y=(self.y + other.y),
+        )
+
 
 _Pointy = Annotated[Point, pydantic.BeforeValidator(Point.from_point_like)]
 
