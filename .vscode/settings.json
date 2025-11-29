@@ -1,4 +1,12 @@
 {
+    "[python]": {
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true
+    },
     "cSpell.words": [
         "arctan",
         "arrowprops",
@@ -12,6 +20,7 @@
         "evalf",
         "figclass",
         "figsize",
+        "fontsize",
         "gridspec",
         "Hilles",
         "hspace",
@@ -45,6 +54,7 @@
         "schemdraw",
         "scriptsize",
         "sharex",
+        "subfigures",
         "supernode",
         "suptitle",
         "sympy",
@@ -53,6 +63,7 @@
         "textcoords",
         "textit",
         "usetex",
+        "xaxis",
         "xlabel",
         "xlim",
         "xticklabels",
@@ -66,5 +77,6 @@
     "files.exclude": {
         "**/__pycache__": true
     },
+    "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "standard"
 }
