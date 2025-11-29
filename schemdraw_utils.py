@@ -63,6 +63,10 @@ class Cardinal(Enum):
         return self.value
 
     @property
+    def with_opposite_direction(self) -> Cardinal:
+        return self.orientation.with_opposite_direction.cardinal
+
+    @property
     def cw(self) -> Cardinal:
         return {
             Cardinal.UP: Cardinal.RIGHT,
@@ -77,46 +81,23 @@ class Cardinal(Enum):
 
 
 @dataclasses.dataclass
-class _ParallelLines(abc.ABC):
+class ParallelLines(abc.ABC):
     d: schemdraw.Drawing
     w: float
+    element_scale: float = 1.0
 
     @abc.abstractmethod
     def draw_element(
         self, elm_class: type[elm.Element2Term], cardinal: Cardinal
     ) -> None:
         raise NotImplementedError
-
-    @abc.abstractmethod
-    def draw_lines(self, cardinal: Cardinal, length: float) -> None:
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def draw_node(self) -> None:
-        raise NotImplementedError
-
-
-class SinglePhaseLines(_ParallelLines):
-    def draw_element(
-        self, elm_class: type[elm.Element2Term], cardinal: Cardinal
-    ) -> None:
-        self._draw_cap(cardinal)
-        self.d.push()
-        self._half_w_move(cardinal.orientation)
-        self._half_w_move(cardinal.ccw.orientation)
-        getattr(
-            elm_class().length(self.w), cardinal.cw.orientation.cardinal.name.lower()
-        )()
-        self.d.pop()
 
     def _draw_cap(self, cardinal: Cardinal) -> None:
         self.d.push()
-        self._half_w_move(cardinal.orientation)
+        self._half_w_move(cardinal.with_opposite_direction.orientation)
         self._half_w_move(cardinal.ccw.orientation)
-        getattr(
-            elm.Line().length(self.w),
-            cardinal.orientation.with_opposite_direction.cardinal.name.lower(),
-        )()
+        line = elm.Line().length(self.w)
+        getattr(line, cardinal.name.lower())()
         self.d.pop()
 
     def draw_lines(self, cardinal: Cardinal, length: float) -> None:
@@ -160,3 +141,55 @@ class SinglePhaseLines(_ParallelLines):
                 self.d.move(-1 * dist, 0)
             case _:
                 raise ValueError
+
+
+class SinglePhaseLines(ParallelLines):
+    def draw_element(
+        self, elm_class: type[elm.Element2Term], cardinal: Cardinal
+    ) -> None:
+        self._draw_cap(cardinal)
+        self.d.push()
+        self._half_w_move(cardinal.orientation)
+        self._half_w_move(cardinal.ccw.orientation)
+        getattr(
+            elm_class().scale(self.element_scale).length(self.w),
+            cardinal.cw.name.lower(),
+        )()
+        self.d.pop()
+
+
+class ThreePhaseLines(ParallelLines):
+    def draw_element(
+        self, elm_class: type[elm.Element2Term], cardinal: Cardinal
+    ) -> None:
+        self._draw_cap(cardinal)
+        self.d.push()
+        self._half_w_move(cardinal.orientation)
+        self._half_w_move(cardinal.ccw.orientation)
+        for i in range(3):
+            getattr(
+                elm_class().scale(self.element_scale).length(self.w),
+                cardinal.name.lower(),
+            )()
+            if i != 2:
+                self._move(cardinal.orientation.with_opposite_direction, self.w)
+                self._half_w_move(cardinal.cw.orientation)
+        getattr(elm.Line().length(self.w), cardinal.ccw.name.lower())()
+        self.d.pop()
+
+    def _draw_cap(self, cardinal: Cardinal) -> None:
+        super()._draw_cap(cardinal)
+        self.d.push()
+        getattr(elm.Line().length(self.w / 2), cardinal.name.lower())()
+        self.d.pop()
+
+    def draw_lines(self, cardinal: Cardinal, length: float) -> None:
+        super().draw_lines(cardinal, length)
+        self.d.push()
+        line = elm.Line().length(length)
+        getattr(line, cardinal.with_opposite_direction.name.lower())()
+        self.d.pop()
+
+    def draw_node(self) -> None:
+        super().draw_node()
+        elm.Dot()
