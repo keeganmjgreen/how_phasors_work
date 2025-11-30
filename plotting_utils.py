@@ -45,5 +45,5 @@ def set_discrete_colors(ax: Axes) -> None:
     )
 
 
-def rm(s: str) -> str:
-    return rf"\rm {s}"
+def rm(string: str) -> str:
+    return "\n".join([rf"\rm {line}" for line in string.split("\n")])

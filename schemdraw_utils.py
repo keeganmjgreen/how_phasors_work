@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 import abc
-from copy import deepcopy
 import dataclasses
+from copy import deepcopy
 from enum import Enum, auto
 
 import schemdraw
 import schemdraw.elements as elm
+
+
+def configure_schemdraw() -> None:
+    schemdraw.config(lw=1, fontsize=12)
 
 
 class _Direction(Enum):
