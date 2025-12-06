@@ -63,6 +63,15 @@ class Cardinal(Enum):
     LEFT = _Orientation(_Direction.NEGATIVE, _Axis.HORIZONTAL)
 
     @property
+    def side(self) -> str:
+        return {
+            Cardinal.UP: "top",
+            Cardinal.RIGHT: "right",
+            Cardinal.DOWN: "bottom",
+            Cardinal.LEFT: "left",
+        }[self]
+
+    @property
     def orientation(self) -> _Orientation:
         return self.value
 
@@ -92,7 +101,7 @@ class ParallelLines(abc.ABC):
 
     @abc.abstractmethod
     def draw_element(
-        self, elm_class: type[elm.Element2Term], cardinal: Cardinal
+        self, elm_class: type[elm.Element2Term], cardinal: Cardinal, label: str = ""
     ) -> None:
         raise NotImplementedError
 
@@ -149,14 +158,17 @@ class ParallelLines(abc.ABC):
 
 class SinglePhaseLines(ParallelLines):
     def draw_element(
-        self, elm_class: type[elm.Element2Term], cardinal: Cardinal
+        self, elm_class: type[elm.Element2Term], cardinal: Cardinal, label: str = ""
     ) -> None:
         self._draw_cap(cardinal)
         self.d.push()
         self._half_w_move(cardinal.orientation)
         self._half_w_move(cardinal.ccw.orientation)
         getattr(
-            elm_class().scale(self.element_scale).length(self.w),
+            elm_class()
+            .scale(self.element_scale)
+            .length(self.w)
+            .label(label, loc=cardinal.cw.side),
             cardinal.cw.name.lower(),
         )()
         self.d.pop()
@@ -164,7 +176,7 @@ class SinglePhaseLines(ParallelLines):
 
 class ThreePhaseLines(ParallelLines):
     def draw_element(
-        self, elm_class: type[elm.Element2Term], cardinal: Cardinal
+        self, elm_class: type[elm.Element2Term], cardinal: Cardinal, label: str = ""
     ) -> None:
         self._draw_cap(cardinal)
         self.d.push()
@@ -178,7 +190,10 @@ class ThreePhaseLines(ParallelLines):
             if i != 2:
                 self._move(cardinal.orientation.with_opposite_direction, self.w)
                 self._half_w_move(cardinal.cw.orientation)
-        getattr(elm.Line().length(self.w), cardinal.ccw.name.lower())()
+        getattr(
+            elm.Line().length(self.w).label(label, loc=cardinal.cw.side),
+            cardinal.ccw.name.lower(),
+        )()
         self.d.pop()
 
     def _draw_cap(self, cardinal: Cardinal) -> None:
