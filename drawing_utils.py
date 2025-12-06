@@ -9,6 +9,11 @@ import pydantic
 from matplotlib.axes import Axes
 
 
+def clear_axes(ax: Axes) -> None:
+    ax.axis("off")
+    ax.set_aspect("equal")
+
+
 class _Rotatable(abc.ABC):
     def rotated(self, angle: float) -> Self:
         raise NotImplementedError
