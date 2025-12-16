@@ -1,8 +1,6 @@
 version: 1
 project:
   title: How Phasors Work
-  authors:
-    - name: Keegan Trujillo-Green
   exports:
     - format: pdf
       template: plain_latex_book
