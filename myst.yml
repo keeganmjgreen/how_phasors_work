@@ -16,5 +16,6 @@ project:
     - file: 5_three_phase_power.ipynb
 site:
   options:
+    logo: logo/logo.png
     folders: true
   template: book-theme
