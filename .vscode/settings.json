@@ -66,6 +66,8 @@
         "textcoords",
         "textit",
         "usetex",
+        "venv",
+        "venvs",
         "xaxis",
         "xlabel",
         "xlim",
@@ -81,5 +83,7 @@
         "**/__pycache__": true
     },
     "python.analysis.autoImportCompletions": true,
-    "python.analysis.typeCheckingMode": "standard"
+    "python.analysis.typeCheckingMode": "standard",
+    "python.defaultInterpreterPath": "~/venvs/how_phasors_work/bin/python",
+    "python.terminal.activateEnvironment": true
 }
