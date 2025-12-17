@@ -3,7 +3,7 @@ from typing import Literal
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from plotting_utils import rm
+from src.plotting_utils import rm
 
 LETTERS = "abcdefghijklmnopqrstuvwxyz"
 _DEFAULT_SEP = ": "
