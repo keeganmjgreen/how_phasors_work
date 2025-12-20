@@ -1,3 +1,5 @@
+# Build static HTML and PDF (Jupyter Book V1):
+source .venv-jb1/bin/activate
 jupyter-book build .
 sed -i 's#!\[](img/cover.png)#<!-- ![](img/cover.png) -->#' 0_prelude.md
 jupyter-book build . --builder=pdflatex

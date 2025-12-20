@@ -1,0 +1,20 @@
+version: 1
+project:
+  title: How Phasors Work
+  authors:
+    - name: Keegan Trujillo-Green
+  exports:
+    - format: pdf
+      template: plain_latex_book
+      output: exports/book.pdf
+  toc:
+    - file: 0_prelude.md
+    - file: 1_introduction.ipynb
+    - file: 2_what_is_a_phasor.ipynb
+    - file: 3_life_with_and_without_phasors.ipynb
+    - file: 4_complex_power_and_the_power_factor.ipynb
+    - file: 5_three_phase_power.ipynb
+site:
+  options:
+    folders: true
+  template: book-theme
