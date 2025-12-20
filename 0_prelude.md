@@ -1,5 +1,7 @@
 # How Phasors Work
 
+![](img/cover.png)
+
 > This book is a work in progress. Existing chapters will be revised, and new chapters will be added. Readers are encouraged to provide feedback at:
 > 
 > [github.com/keeganmjgreen/how_phasors_work/issues](https://github.com/keeganmjgreen/how_phasors_work/issues)
