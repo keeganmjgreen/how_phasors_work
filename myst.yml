@@ -1,10 +1,6 @@
 version: 1
 project:
   title: How Phasors Work
-  exports:
-    - format: pdf
-      template: plain_latex_book
-      output: exports/book.pdf
   github: keeganmjgreen/how_phasors_work
   toc:
     - file: 0_prelude.md
