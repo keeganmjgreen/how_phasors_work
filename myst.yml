@@ -5,6 +5,7 @@ project:
     - format: pdf
       template: plain_latex_book
       output: exports/book.pdf
+  github: keeganmjgreen/how_phasors_work
   toc:
     - file: 0_prelude.md
     - file: 1_introduction.ipynb
