@@ -113,6 +113,18 @@ class Segment(_Rotatable, _Drawable):
             ),
         )
 
+    @classmethod
+    def horizontal(
+        cls: type[Segment], y: float = 0.0, x1: float = 0.0, x2: float = 10.0
+    ) -> Segment:
+        return cls(start=Point(x1, y), end=Point(x2, y))
+
+    @classmethod
+    def vertical(
+        cls: type[Segment], x: float = 0.0, y1: float = 0.0, y2: float = 10.0
+    ) -> Segment:
+        return cls(start=Point(x, y1), end=Point(x, y2))
+
     @property
     def length(self) -> float:
         return np.sqrt(self._dx**2 + self._dy**2)

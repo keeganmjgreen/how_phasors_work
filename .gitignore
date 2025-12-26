@@ -1,7 +1,6 @@
-__pycache__/*
 _build/
 .vscode/tasks.json
+*.pyc
 cover/img/
-src/__pycache__/*
 src/how_phasors_work.egg-info/*
 todos.txt
