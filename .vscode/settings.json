@@ -4,7 +4,7 @@
             "source.fixAll": "explicit",
             "source.organizeImports": "explicit"
         },
-        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true
     },
     "cSpell.words": [
@@ -52,10 +52,12 @@
         "phasor",
         "Phasors",
         "polyphase",
+        "predispatch",
         "pycache",
         "pydantic",
         "schemdraw",
         "scriptsize",
+        "setpoints",
         "sharex",
         "subfigures",
         "supernode",

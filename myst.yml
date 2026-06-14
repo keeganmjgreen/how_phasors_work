@@ -9,6 +9,7 @@ project:
     - file: 3_life_with_and_without_phasors.ipynb
     - file: 4_complex_power_and_the_power_factor.ipynb
     - file: 5_three_phase_power.ipynb
+    - file: 6_grid_modeling.md
 site:
   options:
     logo: logo/logo.png
