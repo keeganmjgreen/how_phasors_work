@@ -1,8 +1,10 @@
 # Grid Modeling
 
-The grid is modeled as a network of $n$ buses connected by branches. Generators and loads are attached to the buses. Each pair of buses $(i, j)$ may be connected by a branch, such as a power line or transformer.
+If the example circuits we've seen so far seem complex to analyze, then this pales in comparison to the complexity of analyzing and operating the electrical grid. The electrical grid may be just another circuit, but it has rapid, far-reaching, and expensive consequences if it fails. If the grid is operated incorrectly, its voltages and frequencies can be put in jeopardy in a matter of seconds or less, creating a risk of cascading failure. Understanding the grid and how it behaves depending on how it's operated is crucial to be able to control it correctly. Grid modeling allows operators to not only stay in control of grid voltages and frequencies, but also to dispatch generators in a way that is cost-optimal.
 
-For example, Figure 6.1 shows a simple electrical grid with three buses, two generators at buses 1 and 2, and a load at bus 3. Buses 1 and 2 are connected by a line branch, and buses 2 and 3 are connected by a transformer branch. This type of diagram is called a *single-line diagram* because it depicts parallel conductors in a single-phase system or balanced three-phase system, like the electrical grid, as single lines for the sake of simplicity.
+The grid is modeled as a network of $n$ electrical buses connected by branches. A bus is a shared point of connection that has minimal electrical impedance. Generators and loads are attached to the buses. Each pair of buses $(i, j)$ may be connected by a branch, such as a power line or transformer, which has nonzero impedance and can result in voltage and phase differences between the buses. In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid.
+
+For example, consider Figure 6.1. It shows a simple electrical grid with three buses, two generators (at buses 1 and 2), and a load (at bus 3). Buses 1 and 2 are connected by a line branch, and buses 2 and 3 are connected by a transformer branch. This type of diagram is called a *single-line diagram* because it depicts the parallel conductors in a single-phase system or balanced three-phase system&mdash;like the electrical grid&mdash;as single lines for the sake of simplicity.
 
 ```{figure} img/fig_6_1.png
 :width: 64%
@@ -11,7 +13,7 @@ For example, Figure 6.1 shows a simple electrical grid with three buses, two gen
 Single-line diagram of an example electrical grid. Note that the symbol for "Load" should not be confused with the symbol for electrical ground.
 ```
 
-Figure 6.2 shows the circuit diagram that corresponds to this single-line diagram for a three-phase system. Each bus $i$ in the single-line diagram corresponds to a set of three per-phase nodes in the circuit.
+Figure 6.2 shows the circuit diagram that corresponds to this single-line diagram for a three-phase system. Each bus $i$ in the single-line diagram corresponds to a set of three nodes in the circuit (one per phase).
 
 ```{figure} img/fig_6_2.png
 :label: fig_6_2
@@ -19,7 +21,9 @@ Figure 6.2 shows the circuit diagram that corresponds to this single-line diagra
 Circuit diagram of the example electrical grid in Figure 6.1.
 ```
 
-In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid. Each branch has a known series impedance $Z_{i, j}$ and shunt impedance $Z_{i, j}^\mathrm{Sh}$ according to the $\Pi$ (Pi) branch model, so named because the single-phase version of the $\Pi$ branch model looks like the Greek letter $\Pi$, as shown in Figure 6.3.
+Each branch has a known series impedance $Z_{i, j}$ and shunt impedance $Z_{i, j}^\mathrm{Sh}$ according to the $\Pi$ (Pi) branch model, so named because the single-phase version of the $\Pi$ branch model looks like the Greek letter $\Pi$, as shown in Figure 6.3.
+
+<!-- Branch impedances and voltage ratios -->
 
 ```{figure} img/fig_6_3.png
 :width: 64%
@@ -28,17 +32,17 @@ In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV p
 The $\Pi$ branch model.
 ```
 
+Our circuit grid model (such as in Figure 6.1) currently has too many unknown variables to be able to solve it. We know the branch impedances, but we do not yet know how the loads should behave or how the bus voltages can be controlled. We now have a way to model the grid, but as-is, we cannot use this model to determine how power will flow through the grid. In the next section, we will narrow down the task from a generic exercise in AC circuit analysis to what is known as the power flow problem.
+
 ## The power flow problem
 
-A grid operator must dispatch generators to serve the loads in its grid. Each load consists of a given active power $P^L$ and reactive power $Q^L$. A dispatch specifies the active power $P^G$ at which to operate each generator. Once a grid operator has decided the generator setpoints, they must be able to validate them. This consists of:
+A grid operator must dispatch generators to serve the loads in its grid. Each load consists of a given active power $P^L$ and reactive power $Q^L$. A dispatch specifies the active power $P^G$ at which to operate each generator. Once a grid operator has decided the generator setpoints, they must be able to validate those setpoints. This consists of:
 
 - Validating that power is able to flow through the grid according to the setpoints in a way that satisfies the loads.
-- Validating that not too much power is flowing through a given line or transformer.
-- Validating that voltages are within acceptable margins.
+- Validating that not too much power is flowing through a given line or transformer, to avoid overloading/overheating it.
+- Validating that voltages are within acceptable margins for the sake of the loads.
 
-The task of determining how power will flow through the grid and whether it will satisfy the loads is known as the power flow (PF) problem.
-
-Because the grid is a circuit, we can solve the power flow problem the same as we solve any other circuit, by doing nodal analysis and solving a system of KCL equations to determine the voltage at each per-phase node (bus), $V_i = |V_i| \angle \delta_i$. The KCL equation for a bus $i$ is:
+The task of determining how power will flow through the grid and whether it will satisfy the loads is known as the power flow (PF) problem. Because the grid is a circuit, we can solve the power flow problem the same as we solve any other circuit, by doing nodal analysis and solving a system of KCL equations to determine the voltage at each bus, denoted $V_i = |V_i| \angle \delta_i$. In the three-phase case, the voltage magnitude $|V_i|$ can be assumed to be the same across the three phases at each bus, and the voltage angle $\delta_i$ can be taken for the first phase only, knowing that the other two phases will be $\pm 2 \pi / 3$ radians apart. The KCL equation for a bus $i$ is:
 
 $$
 \sum_{j \, \in \, \mathbf{J}_i} \frac{|V_i| \angle \delta_i - |V_j| \angle \delta_j}{Z_{i, j}} = \frac{P_i + j Q_i}{|V_i| \angle \delta_i}
