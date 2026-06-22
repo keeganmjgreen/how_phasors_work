@@ -24,6 +24,7 @@ Circuit diagram of the example electrical grid in Figure 6.1.
 Each branch has a known series impedance $Z_{i, j}$ and shunt impedance $Z_{i, j}^\mathrm{Sh}$ according to the $\Pi$ (Pi) branch model, so named because the single-phase version of the $\Pi$ branch model looks like the Greek letter $\Pi$, as shown in Figure 6.3.
 
 <!-- Branch impedances and voltage ratios -->
+<!-- Half of admittance, not impedance -->
 
 ```{figure} img/fig_6_3.png
 :width: 64%
@@ -45,10 +46,10 @@ A grid operator must dispatch generators to serve the loads in its grid. Each lo
 The task of determining how power will flow through the grid and whether it will satisfy the loads is known as the power flow (PF) problem. Because the grid is a circuit, we can solve the power flow problem the same as we solve any other circuit, by doing nodal analysis and solving a system of KCL equations to determine the voltage at each bus, denoted $V_i = |V_i| \angle \delta_i$. In the three-phase case, the voltage magnitude $|V_i|$ can be assumed to be the same across the three phases at each bus, and the voltage angle $\delta_i$ can be taken for the first phase only, knowing that the other two phases will be $\pm 2 \pi / 3$ radians apart. The KCL equation for a bus $i$ is:
 
 $$
-\sum_{j \, \in \, \mathbf{J}_i} \frac{|V_i| \angle \delta_i - |V_j| \angle \delta_j}{Z_{i, j}} = \frac{P_i + j Q_i}{|V_i| \angle \delta_i}
+\left( \frac{P_i + j Q_i}{|V_i| \angle \delta_i} \right)^{\!*} = \sum_{j \, \in \, \mathbf{K}_i} \frac{|V_i| \angle \delta_i - |V_j | \angle \delta_j}{Z_{i, j}}
 $$
 
-The LHS represents the sum of currents flowing out of bus $i$ to a connected bus $j \in \mathbf{J}_i$, where $\mathbf{J}_i$ is the set of buses connected to bus $i$. The RHS represents the current flow due to attached generators and/or loads.
+The LHS represents the current flow due to attached generators and/or loads. The RHS represents the sum of currents flowing out of bus $i$ to a connected bus $j \in \mathbf{K}_i$, where $\mathbf{K}_i$ is the set of buses connected to bus $i$.
 
 Each bus and thus each KCL equation has four variables: voltage magnitude $|V_i|$, voltage angle $\delta_i$, active power $P_i$, and reactive power $Q_i$. Each of the $n$ KCL equations is a complex equation that can be split into one real equation and one imaginary equation, for a total of $2 n$ independent equations making up the system of equations. There are $4 n$ unique variables, so half of them must be fixed in order for the system of equations to have an exactly determined solution. The other half of the variables must be left as free variables that can take on whatever values are required to satisfy the system of equations. Which variables we fix and which variables we allow to vary depends on the type of each bus, as we will discuss. In order to support different numbers of buses of each type, half of the variables *at each bus* must be fixed and the other half free. At most buses, we don't care about the voltage angle, so we leave $\delta_i$ as a free variable.
 
@@ -78,3 +79,150 @@ As an example of how these bus classifications would apply, consider the electri
 
 Single-line diagram of another example electrical grid. 
 ```
+
+## Deriving the power flow equations
+
+$$
+\left( \frac{S_i}{V_i} \right)^{\!*} = \sum_{k \, \in \, \mathbf{K}_i} (V_i - V_k) \, y_{ik} + V_i \sum_{k \, \in \, \mathbf{K}_i} \frac{y_{ik}^\text{Sh}}{2}
+$$
+
+Taking the conjugate of both sides:
+
+$$
+\frac{S_i}{V_i} = \left\{ \, \sum_{k \, \in \, \mathbf{K}_i} (V_i - V_k) \, y_{ik} \right\}^{\!*} + V_i^* \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
+$$
+
+Multiplying both sides by $V_i$:
+
+$$
+S_i = V_i \left\{ \, \sum_{k \, \in \, \mathbf{K}_i} (V_i - V_k) \, y_{ik} \right\}^{\!*} + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
+$$
+
+Substituting $V_i = |V_i| \cos \delta_i + j \, |V_i| \sin \delta_i$ and $y_{ik} = g_{ik} + j b_{ik}$:
+
+$$
+\begin{aligned}
+    S_i
+    & = V_i \left\{ \, \sum_{k \, \in \, \mathbf{K}_i} (|V_i| \cos \delta_i + j \, |V_i| \sin \delta_i - |V_k| \cos \delta_k - j \, |V_k| \sin \delta_k) (g_{ik} + j b_{ik}) \right\}^{\!*} \\
+    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
+\end{aligned}
+$$
+
+Expanding the parenthesized factors:
+
+$$
+\begin{aligned}
+    S_i
+    & = V_i \left\{ \, \sum_{k \, \in \, \mathbf{K}_i} \! \left(
+    \begin{aligned}
+        \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, g_{ik} - (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, b_{ik} \bigr] \\
+        + \, j \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, b_{ik} + (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, g_{ik} \bigr]
+    \end{aligned}
+    \right) \right\}^{\!*} \\
+    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
+\end{aligned}
+$$
+
+Substituting $V_i = |V_i| \cos \delta_i + j \, |V_i| \sin \delta_i$ and conjugating the first summation:
+
+$$
+\begin{aligned}
+    S_i
+    & = (|V_i| \cos \delta_i + j \, |V_i| \sin \delta_i) \sum_{k \, \in \, \mathbf{K}_i} \! \left(
+    \begin{aligned}
+        \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, g_{ik} - (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, b_{ik} \bigr] \\
+        - \, j \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, b_{ik} + (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, g_{ik} \bigr] \\
+    \end{aligned}
+    \right) \\
+    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
+\end{aligned}
+$$
+
+Expanding:
+
+$$
+\begin{aligned}
+    S_i
+    & = \sum_{k \, \in \, \mathbf{K}_i} \left(
+    \begin{aligned}
+        |V_i| \cos \delta_i \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, g_{ik} - (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, b_{ik} \bigr] & \\
+        - \, j \, |V_i| \cos \delta_i \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, b_{ik} + (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, g_{ik} \bigr] & \\
+        + \, j \, |V_i| \sin \delta_i \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, g_{ik} - (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, b_{ik} \bigr] & \\
+        + \,\:\:\, |V_i| \sin \delta_i \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, b_{ik} + (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, g_{ik} \bigr] &
+    \end{aligned}
+    \right) \\
+    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
+\end{aligned}
+$$
+
+Expanding further, grouping into real and imaginary parts, and grouping by $g_{ik}$ and $b_{ik}$ therewithin:
+
+$$
+\begin{aligned}
+    S_i
+    & = \sum_{k \, \in \, \mathbf{K}_i} \left(
+    \begin{aligned}
+        & \left[
+        \begin{aligned}
+            & \bigl[ |V_i|^2 \cos^2 \delta_i - |V_i| |V_k| \cos \delta_i \cos \delta_k + |V_i|^2 \sin^2 \delta_i - |V_i| |V_k| \sin \delta_i \sin \delta_k \bigr] g_{ik} \\
+            & \bigl[ - |V_i|^2\sin \delta_i \cos \delta_i + |V_i| |V_k| \cos \delta_i \sin \delta_k + |V_i|^2\sin \delta_i \cos \delta_i - |V_i| |V_k| \sin \delta_i \cos \delta_k \bigr] b_{ik} \\
+        \end{aligned}
+        \right] \\
+        & + \, j \! \left[
+        \begin{aligned}
+            & \bigl[ - |V_i|^2 \cos^2 \delta_i + |V_i| |V_k| \cos \delta_i \cos \delta_k - |V_i|^2 \sin^2 \delta_i + |V_i| |V_k| \sin \delta_i \sin \delta_k \bigr] b_{ik} \\
+            & + \bigl[ - |V_i|^2\sin \delta_i \cos \delta_i + |V_i| |V_k| \cos \delta_i \sin \delta_k + |V_i|^2\sin \delta_i \cos \delta_i - |V_i| |V_k| \sin \delta_i \cos \delta_k \bigr] g_{ik}
+        \end{aligned}
+        \right]
+    \end{aligned}
+    \right) \\
+    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
+\end{aligned}
+$$
+
+Applying $|V_i|^2 \sin^2 \delta_i + |V_i|^2 \cos^2 \delta_i = |V_i|^2$ via the Pythagorean identity, cancelling out the $|V_i|^2 \sin \delta_i \cos \delta_i$ terms, and grouping:
+
+$$
+\begin{aligned}
+    S_i
+    & = \sum_{k \, \in \, \mathbf{K}_i} \! \left(
+    \begin{aligned}
+        & |V_i|^2 \, g_{ik} - |V_i| |V_k| (\cos \delta_i \cos \delta_k + \sin \delta_i \sin \delta_k) \, g_{ik} + |V_i| |V_k| (\cos \delta_i \sin \delta_k - \sin \delta_i \cos \delta_k) \, b_{ik} \\
+        & + j \, [- |V_i|^2 \, b_{ik} - |V_i| |V_k| (\cos \delta_i \cos \delta_k + \sin \delta_i \sin \delta_k) \, b_{ik} - |V_i| |V_k| (\sin \delta_i \cos \delta_k + \cos \delta_i \sin \delta_k) \, g_{ik}]
+    \end{aligned}
+    \right) \\
+    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
+\end{aligned}
+$$
+
+Applying the angle-difference identities $\cos \alpha \cos \beta + \sin \alpha \sin \beta = \cos(\alpha - \beta)$ and $\sin \alpha \cos \beta - \cos \alpha \sin \beta = \sin(\alpha - \beta)$:
+
+$$
+\begin{aligned}
+    S_i
+    & = \sum_{k \, \in \, \mathbf{K}_i} \! \left(
+    \begin{aligned}
+        & |V_i|^2 \, g_{ik} - |V_i| |V_k| \cos(\delta_i - \delta_k) \, g_{ik} - |V_i| |V_k| \sin(\delta_k - \delta_i) \, b_{ik} \\
+        & + j \, [- |V_i|^2 \, b_{ik} - |V_i| |V_k| \cos(\delta_i - \delta_k) \, b_{ik} + |V_i| |V_k| \sin(\delta_i - \delta_k) \, g_{ik}]
+    \end{aligned}
+    \right) \\
+    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
+\end{aligned}
+$$
+
+Simplifying $|V_i|^2 \, g_{ik} - j \, |V_i|^2 \, b_{ik}$ to $|V_i|^2 \, y_{ik}^*$, moving it from the first summation to the second, and factoring out $|V_i|$ and $|V_k|$ from the first:
+
+$$
+\begin{aligned}
+    S_i
+    & = |V_i| \sum_{k \, \in \, \mathbf{K}_i} \! \left[ \, |V_k| \left(
+    \begin{aligned}
+        & - \! \cos(\delta_i - \delta_k) \, g_{ik} - \sin(\delta_k - \delta_i) \, b_{ik} \\
+        & + j \, [- \! \cos(\delta_i - \delta_k) \, b_{ik} + \sin(\delta_i - \delta_k) \, g_{ik}]
+    \end{aligned}
+    \right) \right] \\
+    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \! \left( y_{ik}^* + \frac{(y_{ik}^\text{Sh})^*}{2} \right)
+\end{aligned}
+$$
+
+The traditional power flow problem is typically formulated in a way that allows some complexity to be moved out of this equation. If we TODO
