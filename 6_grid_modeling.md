@@ -134,6 +134,8 @@ Y_{ik} =
 \end{cases}
 $$
 
+Thus, the admittance matrix does not only specify the admittance values between buses in its off-diagonal elements. Its off-diagonal elements additionally specify whether a branch is present between any $ik$-pair of buses ($Y_{ik} \neq 0$), whether a branch is a transformer ($a_{ik} \neq 1$), and its voltage ratio if it is a transformer ($T_{ik} \neq 1$), and even its phase shift if it is also a phase-shifting transformer ($\varphi_{ik} \neq 0$). Furthermore, the diagonal elements specify, for each bus, the shunt admittances of neighboring branches.
+
 Just as how a branch admittance $y$ can be split into real and imaginary parts $g + j b$, where $g$ is conductance and $b$ is susceptance, the admittance matrix $Y \!$ can be split into $G + j B$, which we will leverage shortly.
 
 The bus injection equations are typically arranged as equations for active and reactive power $P + j Q = S$. To describe the power at a given bus $i$, we take the conjugate of Equation {eq}`eq_6_6` and multiply both sides by $V_i$:
