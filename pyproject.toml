@@ -4,6 +4,7 @@ dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "ipykernel<8",
     "jupyter-book>=2,<3",
     "matplotlib<4",
     "numpy<3",

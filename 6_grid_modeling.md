@@ -1,19 +1,23 @@
 # Grid Modeling
 
-If the example circuits we've seen so far seem complex to analyze, then this pales in comparison to the complexity of analyzing and operating the electrical grid. The electrical grid may be just another circuit, but it has rapid, far-reaching, and expensive consequences if it fails. If the grid is operated incorrectly, its voltages and frequencies can be put in jeopardy in a matter of seconds or less, creating a risk of cascading failure. Understanding the grid and how it behaves depending on how it's operated is crucial to be able to control it correctly. Grid modeling allows operators to not only stay in control of grid voltages and frequencies, but also to dispatch generators in a way that is cost-optimal.
+If the example circuits we've seen so far seem complicated to analyze, then this pales in comparison to the complexity of analyzing and operating the electrical grid. The electrical grid may be just another circuit, but it has rapid, far-reaching, and expensive consequences if it fails. If the grid is operated incorrectly, its voltages and frequencies can be put in jeopardy in a matter of seconds or less, creating a risk of cascading failure. Understanding the grid and how it behaves depending on how it's operated is crucial to be able to control it correctly. Grid modeling allows operators to not only stay in control of grid voltages and frequencies, but also to dispatch generators in a way that is cost-optimal.
 
-The grid is modeled as a network of $n$ electrical buses connected by branches. A bus is a shared point of connection that has minimal electrical impedance. Generators and loads are attached to the buses. Each pair of buses $(i, j)$ may be connected by a branch, such as a power line or transformer, which has nonzero impedance and can result in voltage and phase differences between the buses. In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid.
+The grid is modeled as a network of $N$ electrical buses connected by branches. A bus is a shared point of connection that has minimal electrical impedance. Generators and loads are attached to the buses. Each pair of buses $(i, k)$[^1] may be connected by a branch&mdash;such as a power line or transformer&mdash;which has nonzero impedance and can result in voltage and phase differences between buses $i$ and $k$. In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid. The sets of buses and branches are denoted $\mathbf{N}$ and $\mathbf{L}$, respectively.
 
-For example, consider Figure 6.1. It shows a simple electrical grid with three buses, two generators (at buses 1 and 2), and a load (at bus 3). Buses 1 and 2 are connected by a line branch, and buses 2 and 3 are connected by a transformer branch. This type of diagram is called a *single-line diagram* because it depicts the parallel conductors in a single-phase system or balanced three-phase system&mdash;like the electrical grid&mdash;as single lines for the sake of simplicity.
+[^1]: Index $k$ is used instead of $j$ to distinguish it from the imaginary unit.
+
+For example, consider Figure 6.1. It shows a simple electrical grid with three buses $\mathbf{N} = \{1, 2, 3\}$, two generators (at buses $1$ and $2$), and a load (at bus $3$). Buses $1$ and $2$ are connected by a line branch, and buses $2$ and $3$ are connected by a transformer branch. This type of diagram is called a *single-line diagram* because it depicts the parallel conductors in a single-phase system or balanced three-phase system&mdash;like the electrical grid&mdash;as single lines for the sake of simplicity.
 
 ```{figure} img/fig_6_1.png
 :width: 64%
 :label: fig_6_1
 
-Single-line diagram of an example electrical grid. Note that the symbol for "Load" should not be confused with the symbol for electrical ground.
+Single-line diagram of an example electrical grid.[^2]
 ```
 
-Figure 6.2 shows the circuit diagram that corresponds to this single-line diagram for a three-phase system. Each bus $i$ in the single-line diagram corresponds to a set of three nodes in the circuit (one per phase).
+[^2]: The symbol for "Load" should not be confused with the symbol for electrical ground.
+
+Figure 6.2 shows the circuit diagram that corresponds to the above single-line diagram for a three-phase system. Each bus in the single-line diagram corresponds to a set of three nodes in the circuit (one per phase).
 
 ```{figure} img/fig_6_2.png
 :label: fig_6_2
@@ -21,21 +25,25 @@ Figure 6.2 shows the circuit diagram that corresponds to this single-line diagra
 Circuit diagram of the example electrical grid in Figure 6.1.
 ```
 
-Each branch has a known series impedance $Z_{i, j}$ and shunt impedance $Z_{i, j}^\mathrm{Sh}$ according to the $\Pi$ (Pi) branch model, so named because the single-phase version of the $\Pi$ branch model looks like the Greek letter $\Pi$, as shown in Figure 6.3.
-
-<!-- Branch impedances and voltage ratios -->
-<!-- Half of admittance, not impedance -->
+Each branch $ik$ has a known series impedance $z_{ik}$ and shunt impedance $z_{ik}^\mathrm{Sh}$ according to the $\Pi$ (Pi) branch model. In grid modeling, these parameters are often expressed as *admittance*: series admittance $y_{ik} = 1 / z_{ik}$ and shunt admittance $y_{ik}^\text{Sh} = 1 / z_{ik}^\text{Sh}$. The $\Pi$ branch model applies the shunt admittance in equal parts on the left and right sides, as shown in Figure 6.3. This results in a single/per-phase circuit diagram that looks like the Greek letter $\Pi$, hence the name.
 
 ```{figure} img/fig_6_3.png
 :width: 64%
 :label: fig_6_3
 
-The $\Pi$ branch model.
+Per-phase power line model (the $\Pi$ branch model).
 ```
 
-Our circuit grid model (such as in Figure 6.1) currently has too many unknown variables to be able to solve it. We know the branch impedances, but we do not yet know how the loads should behave or how the bus voltages can be controlled. We now have a way to model the grid, but as-is, we cannot use this model to determine how power will flow through the grid. In the next section, we will narrow down the task from a generic exercise in AC circuit analysis to what is known as the power flow problem.
+Transformer branches build upon this in order to model nonideal transformers. Transformer branches are modeled as ideal transformers paired with the $\Pi$ branch model, as shown in Figure 6.4. A complex-valued voltage ratio $a_{ik}$ is used to model both the transformer's voltage ratio $T_{ik} = |a_{ik}|$ and, in the case of a phase-shifting transformer such as a zigzag transformer, its phase shift $\varphi_{ik} = \arg(a_{ik})$. With the ideal transformer adjacent to bus $i$, bus $i$ is known as the *tap bus* and bus $k$ as the *impedance bus* or *$Z$ bus*.
 
-## The power flow problem
+```{figure} img/fig_6_4.png
+:width: 64%
+:label: fig_6_4
+
+Per-phase transformer model (the $\Pi$ branch model + ideal transformer).
+```
+
+## The power flow (PF) problem
 
 A grid operator must dispatch generators to serve the loads in its grid. Each load consists of a given active power $P^L$ and reactive power $Q^L$. A dispatch specifies the active power $P^G$ at which to operate each generator. Once a grid operator has decided the generator setpoints, they must be able to validate those setpoints. This consists of:
 
@@ -43,15 +51,142 @@ A grid operator must dispatch generators to serve the loads in its grid. Each lo
 - Validating that not too much power is flowing through a given line or transformer, to avoid overloading/overheating it.
 - Validating that voltages are within acceptable margins for the sake of the loads.
 
-The task of determining how power will flow through the grid and whether it will satisfy the loads is known as the power flow (PF) problem. Because the grid is a circuit, we can solve the power flow problem the same as we solve any other circuit, by doing nodal analysis and solving a system of KCL equations to determine the voltage at each bus, denoted $V_i = |V_i| \angle \delta_i$. In the three-phase case, the voltage magnitude $|V_i|$ can be assumed to be the same across the three phases at each bus, and the voltage angle $\delta_i$ can be taken for the first phase only, knowing that the other two phases will be $\pm 2 \pi / 3$ radians apart. The KCL equation for a bus $i$ is:
+The task of determining how power will flow through the grid and whether it will satisfy the loads is known as the power flow (PF) problem. Because the grid is a circuit, we can solve the power flow problem the same as we solve any other circuit, by doing nodal analysis and solving a system of KCL equations to determine the voltage at each bus, denoted $V_i = |V_i| \angle \delta_i$. In the three-phase case, the voltage magnitude $|V_i|$ can be assumed to be the same across the three phases at each bus, and the voltage angle $\delta_i$ can be taken for the first phase only, knowing that the other two phases will be $\pm 2 \pi / 3$ radians apart.
+
+For generality, we will model all branches as transformer branches. For line branches, we can simply set $T_{ik} = 1$ and $\varphi_{ik} = 0$. We will call branch $ik$ an *$i$-forward branch* if bus $i$ is the tap bus, or an *$i$-reverse branch* if bus $i$ is the impedance bus. In this sense, the grid model becomes a directed graph rather than an undirected graph, and we must account for the forward and reverse branch directions distinctly. We do this by deriving the current $I_{ik}$ flowing into branch $ik$ from bus $i$ (that is, flowing directly into the ideal transformer), as well as the current $I_{ki}$ flowing into the branch from the opposite bus $k$. To determine $I_{ik}$, we apply KCL by summing the currents out of node $i'$ in {ref}`fig_6_4`:
 
 $$
-\left( \frac{P_i + j Q_i}{|V_i| \angle \delta_i} \right)^{\!*} = \sum_{j \, \in \, \mathbf{K}_i} \frac{|V_i| \angle \delta_i - |V_j | \angle \delta_j}{Z_{i, j}}
+\begin{aligned}
+& - \!\! I_{ik}' + V_i' \, \frac{y_{ik}^\text{Sh}}{2} + (V_i' - V_k) \, y_{ik} = 0 \\
+& \implies I_{ik}' = V_i' \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
+& \implies I_{ik} a_{ik}^* = V_i \, \frac{1}{a_{ik}} \! \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
+& \implies I_{ik} = V_{ik} \, \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik}
+\end{aligned}
+$$ (eq_I_ik)
+
+And to determine $I_{ki}$, we apply KCL by summing the currents out of node $k'$:
+
+$$
+\begin{aligned}
+& - \!\! I_{ki} + (V_k - V_i') \, y_{ik} + V_k \frac{y_{ik}^\text{Sh}}{2} = 0 \\
+& \implies I_{ki} = V_k \left( y_{ik} + \frac{y_{ik}^\text{Sh}}{2} \right) - V_i' \, y_{ik} \\
+& \implies I_{ki} = V_k \left( y_{ik} + \frac{y_{ik}^\text{Sh}}{2} \right) - V_i \, \frac{1}{a_{ik}} y_{ik}
+\end{aligned}
+$$ (eq_I_ki)
+
+### The bus injection model
+
+To define the power flow problem, we need to formulate a set of power flow equations. The most common formulation is known as the *bus injection model*. We start with KCL, which tells us that at a bus $i$ with nominal voltage $V_i$, the current $(S_i / V_i)^*$ injected due to attached generation and/or load $S_i$ must equal the sum of currents flowing out of the bus:
+
+$$
+\begin{aligned}
+(S_i / V_i)^*
+& = \text{total current out of bus $i$ via $i$-forward branches} \\
+& \, + \text{total current out of bus $i$ via $i$-reverse branches} \\
+& = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! I_{ik} + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! I_{ik}
+\end{aligned}
 $$
 
-The LHS represents the current flow due to attached generators and/or loads. The RHS represents the sum of currents flowing out of bus $i$ to a connected bus $j \in \mathbf{K}_i$, where $\mathbf{K}_i$ is the set of buses connected to bus $i$.
+The subscript "$k \! : \! (i, k) \! \in \! \mathbf{L}$" means "for each bus $k$ to which bus $i$ is connected by an $i$-forward branch" and the subscript "$k \! : \! (k, i) \! \in \! \mathbf{L}$" means "for each bus $k$ to which bus $i$ is connected by an $i$-reverse branch". Substituting $I_{ik}$ and $I_{ki}$ from equations {eq}`eq_I_ik` and {eq}`eq_I_ki` gives us:
 
-Each bus and thus each KCL equation has four variables: voltage magnitude $|V_i|$, voltage angle $\delta_i$, active power $P_i$, and reactive power $Q_i$. Each of the $n$ KCL equations is a complex equation that can be split into one real equation and one imaginary equation, for a total of $2 n$ independent equations making up the system of equations. There are $4 n$ unique variables, so half of them must be fixed in order for the system of equations to have an exactly determined solution. The other half of the variables must be left as free variables that can take on whatever values are required to satisfy the system of equations. Which variables we fix and which variables we allow to vary depends on the type of each bus, as we will discuss. In order to support different numbers of buses of each type, half of the variables *at each bus* must be fixed and the other half free. At most buses, we don't care about the voltage angle, so we leave $\delta_i$ as a free variable.
+$$
+\begin{aligned}
+    (S_i / V_i)^*
+    & = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \left( V_i \, \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik} \right) \\
+    & + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! \left( V_i \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}} y_{ik} \right)
+\end{aligned}
+$$
+
+Now we split up the summations such that $V_i$ can be factored out where possible:
+
+$$
+\begin{aligned}
+    (S_i / V_i)^*
+    & = V_i \, \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \sum_{k : (k, i) \in \mathbf{L}} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) \Biggr) \\
+    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ik}} y_{ik}
+\end{aligned}
+$$
+
+The bus injection model is typically expressed in a way that allows some complexity to be moved into a new $N \! \times \! N$ matrix $Y \!$, called the *admittance matrix*, which allows the above equation to be rewritten succinctly as:
+
+$$
+(S_i / V_i)^* = \sum_{k \in \mathbf{N}} V_k \, Y_{ik}
+$$ (eq_6_6)
+
+Or, even more simply, as a matrix equation:
+
+$$
+(S / V)^* = Y \!\: V
+$$
+
+Where $Y$ is defined as having the following diagonal and off-diagonal elements:
+
+$$
+Y_{ii} = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right)
+$$
+
+$$
+Y_{ik} =
+\begin{cases}
+- y_{ik} / a_{ik}^* & \text{if branch $ik$ is an $i$-forward branch} \\
+- y_{ik} / a_{ik} & \text{if branch $ik$ is an $i$-reverse branch} \\
+\,\,\,\; 0 & \text{if branch $ik$ does not exist (no branch)}
+\end{cases}
+$$
+
+Just as how a branch admittance $y$ can be split into real and imaginary parts $g + j b$, where $g$ is conductance and $b$ is susceptance, the admittance matrix $Y \!$ can be split into $G + j B$, which we will leverage shortly.
+
+The bus injection equations are typically arranged as equations for active and reactive power $P + j Q = S$. To describe the power at a given bus $i$, we take the conjugate of Equation {eq}`eq_6_6` and multiply both sides by $V_i$:
+
+$$
+P_i + j Q_i = \sum_{k \in \mathbf{N}} V_i \, V_k^* \, Y_{ik}^*
+$$
+
+Solver software often expects real-valued equations, so we work towards splitting this equation into a real part and an imaginary part. Furthermore, the bus injection model most commonly uses polar coordinates for voltage and rectangular coordinates for admittance. To satisfy this, we substitute $V = |V| \cos \delta + j \, |V| \sin \delta$ and $Y = G + j B$ in the above equation, giving us the following. We will eventually be able to take the imaginary unit $j$ out of the picture.
+
+$$
+P_i + j Q_i = \sum_{k \in \mathbf{N}} (|V_i| \cos \delta_i + j \, |V_i| \sin \delta_i) (|V_k| \cos \delta_k - j \, |V_k| \sin \delta_k) (G_{ik} - j B_{ik})
+$$
+
+Expanding the above equation yields:
+
+$$
+P_i + j Q_i = \sum_{k \in \mathbf{N}} \left(
+\begin{aligned}
+    & |V_i| |V_k| \cos \delta_i \cos \delta_k - j \, |V_i| |V_k| \cos \delta_i \sin \delta_k \\
+    & + j \, |V_i| |V_k| \sin \delta_i \cos \delta_k + |V_i| |V_k| \sin \delta_i \sin \delta_k
+\end{aligned}
+\right) (G_{ik} - j B_{ik})
+$$
+
+Applying the angle-difference identities $\cos \alpha \cos \beta + \sin \alpha \sin \beta = \cos(\alpha - \beta)$ and $\sin \alpha \cos \beta - \cos \alpha \sin \beta = \sin(\alpha - \beta)$ gives us:
+
+$$
+P_i + j Q_i = |V_i| \sum_{k \in \mathbf{N}} |V_k| (\cos (\delta_i - \delta_k) + j \sin(\delta_i - \delta_k)) (G_{ik} - j B_{ik})
+$$
+
+Expanding once again yields:
+
+$$
+P_i + j Q_i = |V_i| \sum_{k \in \mathbf{N}} |V_k| (G_{ik} \cos(\delta_i - \delta_k) - j B_{ik} \cos(\delta_i - \delta_k) + j G_{ik} \sin(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k))
+$$
+
+Finally, we are able to split this complex-valued equation into the following real-valued **power flow equations**, for each bus $i$. These are suitable for use with solver software.
+
+$$
+\boxed{
+\begin{aligned}
+    P_i & = |V_i| \sum_{k \in \mathbf{N}} |V_k| (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) \\
+    Q_i & = |V_i| \sum_{k \in \mathbf{N}} |V_k| (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k))
+\end{aligned}
+}
+$$ (eq_pf)
+
+### Bus classifications
+
+Our grid model, expressed by the power flow equations, currently has too many unknown variables to be able to solve it. We know the branch admittances, but we do not yet know how the loads should behave or how the bus voltages can be controlled. We now have a model of the grid, but as-is, we cannot use this model to determine how power will flow through the grid. In this section, we will narrow down our definition of the power flow problem.
+
+Each bus and thus each pair of $(P_i, Q_i)$ equations {eq}`eq_pf` has four variables: voltage magnitude $|V_i|$, voltage angle $\delta_i$, active power $P_i$, and reactive power $Q_i$. Each bus contributes two equations, for a total of $2 N$ independent equations making up the system of equations. There are $4 N$ unique variables, so half of them must be fixed in order for the system of equations to have an exactly determined solution. The other half of the variables must be left as free variables that can take on whatever values are required to satisfy the system of equations. Which variables we fix and which variables we allow to vary depends on the type of each bus, as we will discuss. In order to support different numbers of buses of each type, half of the variables *at each bus* must be fixed and the other half free. At most buses, we don't care about the voltage angle, so we leave $\delta_i$ as a free variable.
 
 **Load bus.** A bus to which only load(s) are attached is known as a load bus. At a load bus, $P_i$ and $Q_i$ are fixed based on the demands of the load (or loads). Although we wish we could fix $|V_i|$ to the exact nominal voltage of the bus for the sake of the attached load(s), this is not generally possible without making the system of equations under- or over-determined. Because of this, loads generally accept a voltage range, and system operators are required to keep $|V_i|$ within an even narrower range. Because only variables $P_i$ and $Q_i$ are fixed at a load bus, a load bus is also known as a **PQ bus**.
 
@@ -73,156 +208,13 @@ The following table summarizes the bus types and their variable classifications.
 
 As an example of how these bus classifications would apply, consider the electrical grid of Figure 6.4. Buses 2 and 3 are both load buses (even though bus 2 has no attached load). Either of buses 1 and 4 can be a generator bus (even though bus 4 has an attached load), but one of them must be a slack bus.
 
-```{figure} img/fig_6_4.png
+```{figure} img/fig_6_5.png
 :width: 64%
-:label: fig_6_4
+:label: fig_6_5
 
 Single-line diagram of another example electrical grid. 
 ```
 
-## Deriving the power flow equations
+<!-- ### Power flow constraints -->
 
-$$
-\left( \frac{S_i}{V_i} \right)^{\!*} = \sum_{k \, \in \, \mathbf{K}_i} (V_i - V_k) \, y_{ik} + V_i \sum_{k \, \in \, \mathbf{K}_i} \frac{y_{ik}^\text{Sh}}{2}
-$$
-
-Taking the conjugate of both sides:
-
-$$
-\frac{S_i}{V_i} = \left\{ \, \sum_{k \, \in \, \mathbf{K}_i} (V_i - V_k) \, y_{ik} \right\}^{\!*} + V_i^* \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
-$$
-
-Multiplying both sides by $V_i$:
-
-$$
-S_i = V_i \left\{ \, \sum_{k \, \in \, \mathbf{K}_i} (V_i - V_k) \, y_{ik} \right\}^{\!*} + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
-$$
-
-Substituting $V_i = |V_i| \cos \delta_i + j \, |V_i| \sin \delta_i$ and $y_{ik} = g_{ik} + j b_{ik}$:
-
-$$
-\begin{aligned}
-    S_i
-    & = V_i \left\{ \, \sum_{k \, \in \, \mathbf{K}_i} (|V_i| \cos \delta_i + j \, |V_i| \sin \delta_i - |V_k| \cos \delta_k - j \, |V_k| \sin \delta_k) (g_{ik} + j b_{ik}) \right\}^{\!*} \\
-    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
-\end{aligned}
-$$
-
-Expanding the parenthesized factors:
-
-$$
-\begin{aligned}
-    S_i
-    & = V_i \left\{ \, \sum_{k \, \in \, \mathbf{K}_i} \! \left(
-    \begin{aligned}
-        \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, g_{ik} - (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, b_{ik} \bigr] \\
-        + \, j \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, b_{ik} + (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, g_{ik} \bigr]
-    \end{aligned}
-    \right) \right\}^{\!*} \\
-    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
-\end{aligned}
-$$
-
-Substituting $V_i = |V_i| \cos \delta_i + j \, |V_i| \sin \delta_i$ and conjugating the first summation:
-
-$$
-\begin{aligned}
-    S_i
-    & = (|V_i| \cos \delta_i + j \, |V_i| \sin \delta_i) \sum_{k \, \in \, \mathbf{K}_i} \! \left(
-    \begin{aligned}
-        \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, g_{ik} - (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, b_{ik} \bigr] \\
-        - \, j \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, b_{ik} + (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, g_{ik} \bigr] \\
-    \end{aligned}
-    \right) \\
-    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
-\end{aligned}
-$$
-
-Expanding:
-
-$$
-\begin{aligned}
-    S_i
-    & = \sum_{k \, \in \, \mathbf{K}_i} \left(
-    \begin{aligned}
-        |V_i| \cos \delta_i \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, g_{ik} - (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, b_{ik} \bigr] & \\
-        - \, j \, |V_i| \cos \delta_i \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, b_{ik} + (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, g_{ik} \bigr] & \\
-        + \, j \, |V_i| \sin \delta_i \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, g_{ik} - (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, b_{ik} \bigr] & \\
-        + \,\:\:\, |V_i| \sin \delta_i \, \bigl[ (|V_i| \cos \delta_i - |V_k| \cos \delta_k) \, b_{ik} + (|V_i| \sin \delta_i - |V_k| \sin \delta_k) \, g_{ik} \bigr] &
-    \end{aligned}
-    \right) \\
-    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
-\end{aligned}
-$$
-
-Expanding further, grouping into real and imaginary parts, and grouping by $g_{ik}$ and $b_{ik}$ therewithin:
-
-$$
-\begin{aligned}
-    S_i
-    & = \sum_{k \, \in \, \mathbf{K}_i} \left(
-    \begin{aligned}
-        & \left[
-        \begin{aligned}
-            & \bigl[ |V_i|^2 \cos^2 \delta_i - |V_i| |V_k| \cos \delta_i \cos \delta_k + |V_i|^2 \sin^2 \delta_i - |V_i| |V_k| \sin \delta_i \sin \delta_k \bigr] g_{ik} \\
-            & \bigl[ - |V_i|^2\sin \delta_i \cos \delta_i + |V_i| |V_k| \cos \delta_i \sin \delta_k + |V_i|^2\sin \delta_i \cos \delta_i - |V_i| |V_k| \sin \delta_i \cos \delta_k \bigr] b_{ik} \\
-        \end{aligned}
-        \right] \\
-        & + \, j \! \left[
-        \begin{aligned}
-            & \bigl[ - |V_i|^2 \cos^2 \delta_i + |V_i| |V_k| \cos \delta_i \cos \delta_k - |V_i|^2 \sin^2 \delta_i + |V_i| |V_k| \sin \delta_i \sin \delta_k \bigr] b_{ik} \\
-            & + \bigl[ - |V_i|^2\sin \delta_i \cos \delta_i + |V_i| |V_k| \cos \delta_i \sin \delta_k + |V_i|^2\sin \delta_i \cos \delta_i - |V_i| |V_k| \sin \delta_i \cos \delta_k \bigr] g_{ik}
-        \end{aligned}
-        \right]
-    \end{aligned}
-    \right) \\
-    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
-\end{aligned}
-$$
-
-Applying $|V_i|^2 \sin^2 \delta_i + |V_i|^2 \cos^2 \delta_i = |V_i|^2$ via the Pythagorean identity, cancelling out the $|V_i|^2 \sin \delta_i \cos \delta_i$ terms, and grouping:
-
-$$
-\begin{aligned}
-    S_i
-    & = \sum_{k \, \in \, \mathbf{K}_i} \! \left(
-    \begin{aligned}
-        & |V_i|^2 \, g_{ik} - |V_i| |V_k| (\cos \delta_i \cos \delta_k + \sin \delta_i \sin \delta_k) \, g_{ik} + |V_i| |V_k| (\cos \delta_i \sin \delta_k - \sin \delta_i \cos \delta_k) \, b_{ik} \\
-        & + j \, [- |V_i|^2 \, b_{ik} - |V_i| |V_k| (\cos \delta_i \cos \delta_k + \sin \delta_i \sin \delta_k) \, b_{ik} - |V_i| |V_k| (\sin \delta_i \cos \delta_k + \cos \delta_i \sin \delta_k) \, g_{ik}]
-    \end{aligned}
-    \right) \\
-    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
-\end{aligned}
-$$
-
-Applying the angle-difference identities $\cos \alpha \cos \beta + \sin \alpha \sin \beta = \cos(\alpha - \beta)$ and $\sin \alpha \cos \beta - \cos \alpha \sin \beta = \sin(\alpha - \beta)$:
-
-$$
-\begin{aligned}
-    S_i
-    & = \sum_{k \, \in \, \mathbf{K}_i} \! \left(
-    \begin{aligned}
-        & |V_i|^2 \, g_{ik} - |V_i| |V_k| \cos(\delta_i - \delta_k) \, g_{ik} - |V_i| |V_k| \sin(\delta_k - \delta_i) \, b_{ik} \\
-        & + j \, [- |V_i|^2 \, b_{ik} - |V_i| |V_k| \cos(\delta_i - \delta_k) \, b_{ik} + |V_i| |V_k| \sin(\delta_i - \delta_k) \, g_{ik}]
-    \end{aligned}
-    \right) \\
-    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \frac{(y_{ik}^\text{Sh})^*}{2}
-\end{aligned}
-$$
-
-Simplifying $|V_i|^2 \, g_{ik} - j \, |V_i|^2 \, b_{ik}$ to $|V_i|^2 \, y_{ik}^*$, moving it from the first summation to the second, and factoring out $|V_i|$ and $|V_k|$ from the first:
-
-$$
-\begin{aligned}
-    S_i
-    & = |V_i| \sum_{k \, \in \, \mathbf{K}_i} \! \left[ \, |V_k| \left(
-    \begin{aligned}
-        & - \! \cos(\delta_i - \delta_k) \, g_{ik} - \sin(\delta_k - \delta_i) \, b_{ik} \\
-        & + j \, [- \! \cos(\delta_i - \delta_k) \, b_{ik} + \sin(\delta_i - \delta_k) \, g_{ik}]
-    \end{aligned}
-    \right) \right] \\
-    & + |V_i|^2 \sum_{k \, \in \, \mathbf{K}_i} \! \left( y_{ik}^* + \frac{(y_{ik}^\text{Sh})^*}{2} \right)
-\end{aligned}
-$$
-
-The traditional power flow problem is typically formulated in a way that allows some complexity to be moved out of this equation. If we TODO
+<!-- ## The optimal power flow (OPF) problem -->

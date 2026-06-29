@@ -402,6 +402,7 @@ wheels = [
 name = "how-phasors-work"
 source = { virtual = "." }
 dependencies = [
+    { name = "ipykernel" },
     { name = "jupyter-book" },
     { name = "matplotlib" },
     { name = "numpy" },
@@ -412,6 +413,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "ipykernel", specifier = "<8" },
     { name = "jupyter-book", specifier = ">=2,<3" },
     { name = "matplotlib", specifier = "<4" },
     { name = "numpy", specifier = "<3" },
