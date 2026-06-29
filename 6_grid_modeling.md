@@ -43,7 +43,7 @@ Transformer branches build upon this in order to model nonideal transformers. Tr
 Per-phase transformer model (the $\Pi$ branch model + ideal transformer).
 ```
 
-## The power flow (PF) problem
+## The Power Flow (PF) Problem
 
 A grid operator must dispatch generators to serve the loads in its grid. Each load consists of a given active power $P^L$ and reactive power $Q^L$. A dispatch specifies the active power $P^G$ at which to operate each generator. Once a grid operator has decided the generator setpoints, they must be able to validate those setpoints. This consists of:
 
@@ -74,7 +74,7 @@ $$
 \end{aligned}
 $$ (eq_I_ki)
 
-### The bus injection model
+### The Bus Injection Model
 
 To define the power flow problem, we need to formulate a set of power flow equations. The most common formulation is known as the *bus injection model*. We start with KCL, which tells us that at a bus $i$ with nominal voltage $V_i$, the current $(S_i / V_i)^*$ injected due to attached generation and/or load $S_i$ must equal the sum of currents flowing out of the bus:
 
@@ -184,7 +184,7 @@ $$
 }
 $$ (eq_pf)
 
-### Bus classifications
+### Bus Classifications
 
 Our grid model, expressed by the power flow equations, currently has too many unknown variables to be able to solve it. We know the branch admittances, but we do not yet know how the loads should behave or how the bus voltages can be controlled. We now have a model of the grid, but as-is, we cannot use this model to determine how power will flow through the grid. In this section, we will narrow down our definition of the power flow problem.
 
@@ -217,6 +217,6 @@ As an example of how these bus classifications would apply, consider the electri
 Single-line diagram of another example electrical grid. 
 ```
 
-<!-- ### Power flow constraints -->
+<!-- ### Power Flow Constraints -->
 
-<!-- ## The optimal power flow (OPF) problem -->
+<!-- ## The Optimal Power Flow (OPF) Problem -->
