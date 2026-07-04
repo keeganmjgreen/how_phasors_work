@@ -1,7 +1,15 @@
-# Build static PDF (Jupyter Book V1):
-source .venv-jb1/bin/activate
-git revert --no-edit 4bbbb54550655d4a5d7a9193ee4c04d1719cd2b8
-jupyter-book build . --builder=pdflatex
-pdfunite cover/cover.pdf cover/blank.pdf _build/latex/book.pdf how_phasors_work.pdf
-git reset
-git reset --keep HEAD~1
+gsed -i 's|!\[\](img/cover.png)|<!-- ![](img/cover.png) -->|' 0_prelude.md
+gsed -i 's/:width: 100%/:width: 156.25%/' *.ipynb
+gsed -i 's/:width: 100%/:width: 156.25%/' *.md
+gsed -i 's/:width: 64%/:width: 100%/' *.ipynb
+gsed -i 's/:width: 64%/:width: 100%/' *.md
+
+uv run jupyter book build --pdf
+
+gsed -i 's|<!-- !\[\](img/cover.png) -->|![](img/cover.png)|' 0_prelude.md
+gsed -i 's/:width: 100%/:width: 64%/' *.ipynb
+gsed -i 's/:width: 100%/:width: 64%/' *.md
+gsed -i 's/:width: 156.25%/:width: 100%/' *.ipynb
+gsed -i 's/:width: 156.25%/:width: 100%/' *.md
+
+cp _build/exports/prelude.pdf how_phasors_work.pdf

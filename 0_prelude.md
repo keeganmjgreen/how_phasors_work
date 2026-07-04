@@ -12,7 +12,7 @@
 > 
 > The latest PDF version is available at:
 > 
-> [github.com/keeganmjgreen/how_phasors_work/blob/main/how_phasors_work.pdf](https://raw.githubusercontent.com/keeganmjgreen/how_phasors_work/refs/heads/main/how_phasors_work.pdf)
+> [github.com/keeganmjgreen/how_phasors_work/](https://raw.githubusercontent.com/keeganmjgreen/how_phasors_work/refs/heads/main/how_phasors_work.pdf)<br>[blob/main/how_phasors_work.pdf](https://raw.githubusercontent.com/keeganmjgreen/how_phasors_work/refs/heads/main/how_phasors_work.pdf)
 > 
 > Cover image by Adam Hilles on Unsplash.
 > 

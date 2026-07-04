@@ -1,0 +1,32 @@
+jtex: v1
+title: Plain LaTeX
+description: A minimal template that only uses vanilla LaTeX commands and environments
+version: 1.0.0
+license: CC-BY-4.0
+authors:
+  - name: Steve Purves
+    github: curvenote
+    twitter: curvenote
+    affiliations:
+      - Curvenote
+tags:
+  - article
+  - paper
+  - vanilla
+doc:
+  - id: title
+    required: true
+  - id: bibliography
+files:
+  - template.tex
+packages:
+  - datetime
+  - fancyhdr
+  - floatrow
+  - geometry
+  - graphicx
+  - hyperref
+  - natbib
+  - pdfpages
+  - sectsty
+  - titling

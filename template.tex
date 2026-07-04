@@ -1,0 +1,97 @@
+\documentclass{article}
+\usepackage{fancyhdr}
+\usepackage{floatrow} \floatsetup[table]{font={footnotesize}} % Small table text.
+\usepackage{array}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{datetime}
+\usepackage[
+  paperwidth=8.5in, paperheight=11in,
+  top=1in, bottom=1in,
+  marginparsep=0.25in,   % Gap between heading/marginalia column and text column.
+  marginparwidth=2.08in, % Width of heading/marginalia column.
+  textwidth=4.17in,      % Width of text column.
+  left=3.33in,           % 1-in outer edge + 2.08-in marginparwidth + 0.25-in marginparsep.
+]{geometry}
+\usepackage{marginnote}
+\reversemarginpar % Heading/marginalia column is left column, not right.
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{kpfonts}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{pdfpages}
+\usepackage{sectsty}
+\usepackage{titling}
+\bibliographystyle{abbrvnat}
+
+[-IMPORTS-]
+
+\makeatletter
+
+% Headings in marginalia column:
+% Sub-sections:
+\renewcommand{\subsection}[1]{
+  \refstepcounter{subsection}
+  \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}#1}
+  \marginnote{\raggedleft\bfseries\normalsize #1}[\parskip]
+  \nopagebreak
+}
+% Sub-sub-sections:
+\renewcommand{\subsubsection}[1]{
+  \refstepcounter{subsubsection}
+  \addcontentsline{toc}{subsubsection}{\protect\numberline{\thesubsubsection}#1}
+  \marginnote{\raggedleft\itshape\normalsize #1}[\parskip]
+  \nopagebreak
+}
+
+% Right-align graphics so >100%-width graphics span the entire page width:
+\let\sidefig@orig@includegraphics\includegraphics
+\newcommand{\sidefig@rightalign@includegraphics}[2][]{%
+  \noindent\makebox[\linewidth][r]{\sidefig@orig@includegraphics[ #1]{#2}}%
+}
+\AtBeginDocument{%
+  \AtBeginEnvironment{figure}{%
+    \let\includegraphics\sidefig@rightalign@includegraphics
+  }%
+}
+
+% Left-align (do not justify) text within tables:
+\appto\@arrayparboxrestore{\raggedright\arraybackslash}
+
+\makeatother
+
+\renewcommand{\arraystretch}{1.25} % Increase vertical space between table rows.
+
+% colors for hyperlinks
+\hypersetup{colorlinks=true, allcolors=blue}
+
+\title{HOW PHASORS WORK}
+
+\author{KEEGAN TRUJILLO-GREEN}
+
+% Header/footer spanning width of both heading/marginalia column and text column:
+\pagestyle{fancy}
+\fancyhead[L]{\hspace{-\dimexpr\marginparsep+\marginparwidth}\thetitle}
+\fancyhead[R]{\hspace{-\dimexpr\marginparsep+\marginparwidth}\theauthor}
+\fancyfoot[C]{\hspace{-\dimexpr\marginparsep+\marginparwidth}\thepage}
+\renewcommand{\headrule}{
+  \hspace{-\dimexpr\marginparsep+\marginparwidth}
+  \vbox to 0pt{\hrule width \dimexpr\textwidth+\marginparsep+\marginparwidth height \headrulewidth\vss}
+}
+
+\setcounter{secnumdepth}{0}
+
+\begin{document}
+
+\includepdf{/Users/keegan_green/workspace/src/how_phasors_work/cover/cover.pdf}
+
+[-CONTENT-]
+
+[# if doc.bibliography #]
+\begin{flushleft}
+\bibliography{[- doc.bibliography | join(", ") -]}
+\end{flushleft}
+[# endif #]
+
+\end{document}

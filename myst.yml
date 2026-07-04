@@ -10,6 +10,17 @@ project:
     - file: 4_complex_power_and_the_power_factor.ipynb
     - file: 5_three_phase_power.ipynb
     - file: 6_grid_modeling.md
+  exports:
+    - format: pdf
+      template: ./ # plain_latex # https://github.com/myst-templates
+      articles:
+        - 0_prelude.md
+        - 1_introduction.ipynb
+        - 2_what_is_a_phasor.ipynb
+        - 3_life_with_and_without_phasors.ipynb
+        - 4_complex_power_and_the_power_factor.ipynb
+        - 5_three_phase_power.ipynb
+        - 6_grid_modeling.md
 site:
   options:
     logo: logo/logo.png

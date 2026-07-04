@@ -6,26 +6,25 @@ The grid is modeled as a network of $N$ electrical buses connected by branches. 
 
 [^1]: Index $k$ is used instead of $j$ to distinguish it from the imaginary unit.
 
-For example, consider Figure 6.1. It shows a simple electrical grid with three buses $\mathbf{N} = \{1, 2, 3\}$, two generators (at buses $1$ and $2$), and a load (at bus $3$). Buses $1$ and $2$ are connected by a line branch, and buses $2$ and $3$ are connected by a transformer branch. This type of diagram is called a *single-line diagram* because it depicts the parallel conductors in a single-phase system or balanced three-phase system&mdash;like the electrical grid&mdash;as single lines for the sake of simplicity.
+For example, consider {ref}`fig_6_1`. It shows a simple electrical grid with three buses $\mathbf{N} = \{1, 2, 3\}$, two generators (at buses $1$ and $2$), and a load (at bus $3$). Buses $1$ and $2$ are connected by a line branch, and buses $2$ and $3$ are connected by a transformer branch. This type of diagram is called a *single-line diagram* because it depicts the parallel conductors in a single-phase system or balanced three-phase system&mdash;like the electrical grid&mdash;as single lines for the sake of simplicity.
 
 ```{figure} img/fig_6_1.png
 :width: 64%
 :label: fig_6_1
 
-Single-line diagram of an example electrical grid.[^2]
+Single-line diagram of an example electrical grid. (The symbol for "Load" should not be confused with the symbol for electrical ground.)
 ```
 
-[^2]: The symbol for "Load" should not be confused with the symbol for electrical ground.
-
-Figure 6.2 shows the circuit diagram that corresponds to the above single-line diagram for a three-phase system. Each bus in the single-line diagram corresponds to a set of three nodes in the circuit (one per phase).
+{ref}`fig_6_2` shows the circuit diagram that corresponds to the above single-line diagram for a three-phase system. Each bus in the single-line diagram corresponds to a set of three nodes in the circuit (one per phase).
 
 ```{figure} img/fig_6_2.png
 :label: fig_6_2
+:width: 100%
 
-Circuit diagram of the example electrical grid in Figure 6.1.
+Circuit diagram of the example electrical grid in {ref}`fig_6_1`.
 ```
 
-Each branch $ik$ has a known series impedance $z_{ik}$ and shunt impedance $z_{ik}^\mathrm{Sh}$ according to the $\Pi$ (Pi) branch model. In grid modeling, these parameters are often expressed as *admittance*: series admittance $y_{ik} = 1 / z_{ik}$ and shunt admittance $y_{ik}^\text{Sh} = 1 / z_{ik}^\text{Sh}$. The $\Pi$ branch model applies the shunt admittance in equal parts on the left and right sides, as shown in Figure 6.3. This results in a single/per-phase circuit diagram that looks like the Greek letter $\Pi$, hence the name.
+Each branch $ik$ has a known series impedance $z_{ik}$ and shunt impedance $z_{ik}^\mathrm{Sh}$ according to the $\Pi$ (Pi) branch model. In grid modeling, these parameters are often expressed as *admittance*: series admittance $y_{ik} = 1 / z_{ik}$ and shunt admittance $y_{ik}^\text{Sh} = 1 / z_{ik}^\text{Sh}$. The $\Pi$ branch model applies the shunt admittance in equal parts on the left and right sides, as shown in {ref}`fig_6_3`. This results in a single/per-phase circuit diagram that looks like the Greek letter $\Pi$, hence the name.
 
 ```{figure} img/fig_6_3.png
 :width: 64%
@@ -34,7 +33,7 @@ Each branch $ik$ has a known series impedance $z_{ik}$ and shunt impedance $z_{i
 Per-phase power line model (the $\Pi$ branch model).
 ```
 
-Transformer branches build upon this in order to model nonideal transformers. Transformer branches are modeled as ideal transformers paired with the $\Pi$ branch model, as shown in Figure 6.4. A complex-valued voltage ratio $a_{ik}$ is used to model both the transformer's voltage ratio $T_{ik} = |a_{ik}|$ and, in the case of a phase-shifting transformer such as a zigzag transformer, its phase shift $\varphi_{ik} = \arg(a_{ik})$. With the ideal transformer adjacent to bus $i$, bus $i$ is known as the *tap bus* and bus $k$ as the *impedance bus* or *$Z$ bus*.
+Transformer branches build upon this in order to model nonideal transformers. Transformer branches are modeled as ideal transformers paired with the $\Pi$ branch model, as shown in {ref}`fig_6_4`. A complex-valued voltage ratio $a_{ik}$ is used to model both the transformer's voltage ratio $T_{ik} = |a_{ik}|$ and, in the case of a phase-shifting transformer such as a zigzag transformer, its phase shift $\varphi_{ik} = \arg(a_{ik})$. With the ideal transformer adjacent to bus $i$, bus $i$ is known as the *tap bus* and bus $k$ as the *impedance bus* or *$Z$ bus*.
 
 ```{figure} img/fig_6_4.png
 :width: 64%
@@ -93,7 +92,7 @@ $$
 \begin{aligned}
     (S_i / V_i)^*
     & = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \left( V_i \, \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik} \right) \\
-    & + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! \left( V_i \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}} y_{ik} \right)
+    & + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( V_i \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}} y_{ik} \right)
 \end{aligned}
 $$
 
@@ -170,7 +169,12 @@ $$
 Expanding once again yields:
 
 $$
-P_i + j Q_i = |V_i| \sum_{k \in \mathbf{N}} |V_k| (G_{ik} \cos(\delta_i - \delta_k) - j B_{ik} \cos(\delta_i - \delta_k) + j G_{ik} \sin(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k))
+P_i + j Q_i = |V_i| \sum_{k \in \mathbf{N}} |V_k| \left(
+\begin{aligned}
+& G_{ik} \cos(\delta_i - \delta_k) - j B_{ik} \cos(\delta_i - \delta_k) \\
+& + j G_{ik} \sin(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)
+\end{aligned}
+\right)
 $$
 
 Finally, we are able to split this complex-valued equation into the following real-valued **power flow equations**, for each bus $i$. These are suitable for use with solver software.
@@ -200,7 +204,11 @@ And what if a bus has neither generators nor loads attached? In this case, the b
 
 **Slack bus.** So far, the classifications of variables as fixed versus free means that the number of free variables equals the number of equations. However, this does not necessarily mean that the system of equations has a solution that is feasible or that it has a solution that is unique. Indeed, with only the two bus types we've defined so far, there is a feasibility issue and a uniqueness issue. Firstly, active power losses due to electrical resistance in the power lines and transformers mean that the total power supplied by the generators does not necessarily equal the total power demanded by the loads plus the power losses. The deficit must be made up for by one or more generators at one or more buses, at which $P$ must thus be free to vary. Otherwise, there would not necessarily be a feasible solution. Secondly, voltage angles are relative, so at one bus, $\delta_i$ must be fixed to $0^\circ$ as a reference against which all other $\delta_i$s are measured. Otherwise, there would be no unique solution. By convention, both the feasibility issue and the uniqueness issue are solved by the same bus. This third type of bus is known as a slack bus, also known as a **swing bus**, **reference bus**, or **Vδ bus**.
 
-The following table summarizes the bus types and their variable classifications.
+{ref}`tab_6_1` summarizes the bus types and their variable classifications.
+
+```{table}
+:width: 100%
+:label: tab_6_1
 
 | Bus type     | $P_i$             | $Q_i$         | $V_i$                               | $\delta_i$                   |
 |--------------|-------------------|---------------|-------------------------------------|------------------------------|
@@ -208,7 +216,10 @@ The following table summarizes the bus types and their variable classifications.
 | Generator/PV | Fixed by dispatch | Free          | Fixed by grid operating requirement | Free                         |
 | Slack/Vδ     | Free              | Free          | Fixed by grid operating requirement | Fixed to $0^\circ$ reference |
 
-As an example of how these bus classifications would apply, consider the electrical grid of Figure 6.4. Buses 2 and 3 are both load buses (even though bus 2 has no attached load). Either of buses 1 and 4 can be a generator bus (even though bus 4 has an attached load), but one of them must be a slack bus.
+Bus types and their variable classifications.
+```
+
+As an example of how these bus classifications would apply, consider the electrical grid of {ref}`fig_6_4`. Buses 2 and 3 are both load buses (even though bus 2 has no attached load). Either of buses 1 and 4 can be a generator bus (even though bus 4 has an attached load), but one of them must be a slack bus.
 
 ```{figure} img/fig_6_5.png
 :width: 64%
