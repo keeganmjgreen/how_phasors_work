@@ -92,17 +92,21 @@ $$
 \begin{aligned}
     (S_i / V_i)^*
     & = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \left( V_i \, \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik} \right) \\
-    & + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( V_i \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}} y_{ik} \right)
+    & + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( V_i \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) - V_k \, \frac{1}{a_{ki}} y_{ki} \right)
 \end{aligned}
 $$
+
+```{note}
+Branch $ik$ is the same as a branch $ki$, admittance $y_{ik}$ is the same as $y_{ki}$, and transformer ratio $a_{ik}$ is the same as $a_{ki}$; the order of the subscript simply indicates whether the bus $i$ for which the KCL equation is written is considered the start or end of the branch.
+```
 
 Now we split up the summations such that $V_i$ can be factored out where possible:
 
 $$
 \begin{aligned}
     (S_i / V_i)^*
-    & = V_i \, \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \sum_{k : (k, i) \in \mathbf{L}} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) \Biggr) \\
-    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ik}} y_{ik}
+    & = V_i \, \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \sum_{k : (k, i) \in \mathbf{L}} \! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ki}} y_{ki}
 \end{aligned}
 $$
 
@@ -128,10 +132,14 @@ $$
 Y_{ik} =
 \begin{cases}
 - y_{ik} / a_{ik}^* & \text{if branch $ik$ is an $i$-forward branch} \\
-- y_{ik} / a_{ik} & \text{if branch $ik$ is an $i$-reverse branch} \\
+- y_{ki} / a_{ki} & \text{if branch $ik$ is an $i$-reverse branch} \\
 \,\,\,\; 0 & \text{if branch $ik$ does not exist (no branch)}
 \end{cases}
 $$
+
+```{note}
+Although $y_{ik}$ is the same as $y_{ki}$, $Y_{ik}$ is not necessarily equal to $Y_{ki}$.
+```
 
 Thus, the admittance matrix does not only specify the admittance values between buses in its off-diagonal elements. Its off-diagonal elements additionally specify whether a branch is present between any $ik$-pair of buses ($Y_{ik} \neq 0$), whether a branch is a transformer ($a_{ik} \neq 1$), and its voltage ratio if it is a transformer ($T_{ik} \neq 1$), and even its phase shift if it is also a phase-shifting transformer ($\varphi_{ik} \neq 0$). Furthermore, the diagonal elements specify, for each bus, the shunt admittances of neighboring branches.
 
