@@ -58,8 +58,8 @@ $$
 \begin{aligned}
 & - \!\! I_{ik}' + V_i' \, \frac{y_{ik}^\text{Sh}}{2} + (V_i' - V_k) \, y_{ik} = 0 \\
 & \implies I_{ik}' = V_i' \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
-& \implies I_{ik} a_{ik}^* = V_i \, \frac{1}{a_{ik}} \! \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
-& \implies I_{ik} = V_{ik} \, \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik}
+& \implies I_{ik} a_{ik}^* = V_i \, \frac{1}{a_{ik}} \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
+& \implies I_{ik} = V_{ik} \, \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik}
 \end{aligned}
 $$ (eq_I_ik)
 
@@ -91,7 +91,7 @@ The subscript "$k \! : \! (i, k) \! \in \! \mathbf{L}$" means "for each bus $k$ 
 $$
 \begin{aligned}
     (S_i / V_i)^*
-    & = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \left( V_i \, \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik} \right) \\
+    & = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \left( V_i \, \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik} \right) \\
     & + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( V_i \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) - V_k \, \frac{1}{a_{ki}} y_{ki} \right)
 \end{aligned}
 $$
@@ -105,7 +105,7 @@ Now we split up the summations such that $V_i$ can be factored out where possibl
 $$
 \begin{aligned}
     (S_i / V_i)^*
-    & = V_i \, \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \sum_{k : (k, i) \in \mathbf{L}} \! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & = V_i \, \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
     & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ki}} y_{ki}
 \end{aligned}
 $$
@@ -125,7 +125,7 @@ $$
 Where $Y$ is defined as having the following diagonal and off-diagonal elements:
 
 $$
-Y_{ii} = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}|^2} \! \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right)
+Y_{ii} = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right)
 $$
 
 $$
