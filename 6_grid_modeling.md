@@ -108,7 +108,7 @@ $$
     & = V_i \, \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
     & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ki}} y_{ki}
 \end{aligned}
-$$
+$$ (eq_sums_split_vi_extracted)
 
 The bus injection model is typically expressed in a way that allows some complexity to be moved into a new $N \! \times \! N$ matrix $Y \!$, called the *admittance matrix*, which allows the above equation to be rewritten succinctly as:
 
@@ -195,6 +195,59 @@ $$
 \end{aligned}
 }
 $$ (eq_pf)
+
+### Applying the Per-Unit System
+
+The per-unit system is the practice in electrical engineering of normalizing quantities like voltage and power to a dimensionless value between 0 and 1. Each quantity $x$ is expressed as a fraction, denoted $x^\text{pu}$, of some base quantity, $x^\text{base}$, such that $x = x^\text{pu} x^\text{base}$. This can be done with many electrical engineering quantities:
+
+$$
+\begin{gathered}
+V = V^\text{pu} V^\text{base} \qquad
+S = S^\text{pu} S^\text{base} \qquad
+I = I^\text{pu} I^\text{base} \\
+y = y^\text{pu} y^\text{base} \qquad
+Z = Z^\text{pu} Z^\text{base} \qquad
+\end{gathered}
+$$
+
+For example, in the per-unit system with a base of $S^\text{base} = 100 \ \mathrm{MV\!A}$, a quantity of $S = 90 \ \mathrm{MV\!A}$ would become $S^\text{pu} = 0.9 \ \mathrm{per \ unit}$ or $0.9 \ \mathrm{pu}$.
+
+The per-unit system makes it easier to interpret quantities relative to the voltage and power ratings of equipment such as buses and generators. And when applied to the power flow problem, the per-unit system offers additional advantages:
+
+- It improves the problem's conditioning when solving using numerical methods.
+- As we will see, it allows most transformer branches to be treated simply as line branches because the transformer voltage ratio becomes $1\!:\!1$ in the per-unit system.
+
+To express the power flow equations in the per-unit system, we select the nominal bus voltage as the base voltage $V_i^\text{base}$ at each bus $i$, and an arbitrary value $S^\text{base}$ as the base power everywhere. We substitute $S_i^\text{pu} S^\text{base}$ for $S_i$ and $V_i^\text{pu} V_i^\text{base}$ for $V_i$ in Equation {eq}`eq_sums_split_vi_extracted` as follows. We also split the transformer voltage ratio $a_{ik}$ into nominal voltage ratio $V_i^\text{base} / V_k^\text{base}$ (which we denote $a_{ik}^\text{base}$) times an off-nominal factor (which we denote $a_{ik}^\text{pu}$). It is not typical to represent transformer voltage ratios in the per-unit system as such&mdash;they are dimensionless quantities to begin with&mdash;but we use the notation $a_{ik} = a_{ik}^\text{pu} a_{ik}^\text{base}$ nonetheless for consistency.
+
+$$
+\begin{aligned}
+    & \left( \frac{S_i^\text{pu} S^\text{base}}{V_i^\text{pu} V_i^\text{base}} \right)^{\! *} \\
+    & = V_i^\text{pu} V_i^\text{base} \, \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu} a_{ik}^\text{base}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{(a_{ik}^\text{pu} a_{ik}^\text{base})^*} \, y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{a_{ki}^\text{pu} a_{ki}^\text{base}} \, y_{ki}
+\end{aligned}
+$$
+
+Substituting $a_{ik}^\text{base} = V_i^\text{base} / V_k^\text{base}$, multiplying both sides by $V_i^\text{base} / S^\text{base}$ and simplifying:
+
+$$
+\begin{aligned}
+    & \left( \frac{S_i^\text{pu}}{V_i^\text{pu}} \right)^{\! *} \\
+    & = V_i^\text{pu} \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \frac{(V_k^\text{base})^2}{S^\text{base}} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \frac{(V_i^\text{base})^2}{S^\text{base}} \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}
+\end{aligned}
+$$
+
+We now apply the per-unit system to the admittances, defining $y_{ik} = y_{ik}^\text{pu} y_{ik}^\text{base}$. If we select $S^\text{base} / (V_k^\text{base})^2$ as the base admittance $y_{ik}^\text{base}$, all base terms conveniently cancel out, leaving something that looks exactly like Equation {eq}`eq_sums_split_vi_extracted`, but with "pu" scripts:
+
+$$
+\begin{aligned}
+    \left( \frac{S_i^\text{pu}}{V_i^\text{pu}} \right)^{\! *}
+    & = V_i^\text{pu} \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \, \Biggl( \frac{y_{ik}^\text{Sh,pu}}{2} + y_{ik}^\text{pu} \Biggr) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \! \Biggl( \frac{y_{ki}^\text{Sh,pu}}{2} + y_{ki}^\text{pu} \Biggr) \Biggr) \\
+    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k^\text{pu} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik}^\text{pu} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k^\text{pu} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}^\text{pu}
+\end{aligned}
+$$
+
+This per-unit version of Equation {eq}`eq_sums_split_vi_extracted` is how the power flow problem is typically formulated. When the voltage ratio of a transformer $ik$ is *nominal*&mdash;that is, equal to the ratio between the nominal voltage at bus $i$ and the nominal voltage at bus $k$, then $a_{ik}^\text{pu} = 1$ and the equation's terms concerning the transformer branch simplify to those of a line branch. This is because the differing bus voltages $V_i^\text{base} \neq V_k^\text{base}$ are now accounted for as part of $y_{ki}^\text{base} \neq y_{ik}^\text{base}$, respectively.
 
 ### Bus Classifications
 
