@@ -44,7 +44,7 @@ Per-phase transformer model (the $\Pi$ branch model + ideal transformer).
 
 ## The Power Flow (PF) Problem
 
-A grid operator must dispatch generators to serve the loads in its grid. Each load consists of a given active power $P^L$ and reactive power $Q^L$. A dispatch specifies the active power $P^G$ at which to operate each generator. Once a grid operator has decided the generator setpoints, they must be able to validate those setpoints. This consists of:
+A grid operator must dispatch generators to serve the loads in its grid. Each load $l$ consists of a given active power $P_l$ and reactive power $Q_l$. A dispatch specifies the active power $P_g$ at which to operate each generator $g$. Once a grid operator has decided the generator setpoints, they must be able to validate those setpoints. This consists of:
 
 - Validating that power is able to flow through the grid according to the setpoints in a way that satisfies the loads.
 - Validating that not too much power is flowing through a given line or transformer, to avoid overloading/overheating it.
@@ -143,7 +143,9 @@ Although $y_{ik}$ is the same as $y_{ki}$, $Y_{ik}$ is not necessarily equal to 
 
 Thus, the admittance matrix does not only specify the admittance values between buses in its off-diagonal elements. Its off-diagonal elements additionally specify whether a branch is present between any $ik$-pair of buses ($Y_{ik} \neq 0$), whether a branch is a transformer ($a_{ik} \neq 1$), and its voltage ratio if it is a transformer ($T_{ik} \neq 1$), and even its phase shift if it is also a phase-shifting transformer ($\varphi_{ik} \neq 0$). Furthermore, the diagonal elements specify, for each bus, the shunt admittances of neighboring branches.
 
-Just as how a branch admittance $y$ can be split into real and imaginary parts $g + j b$, where $g$ is conductance and $b$ is susceptance, the admittance matrix $Y \!$ can be split into $G + j B$, which we will leverage shortly.
+Just as how a branch admittance $y$ can be split into real and imaginary parts $g + j b$, where $g$ is conductance[^2] and $b$ is susceptance, the admittance matrix $Y \!$ can be split into $G + j B$, which we will leverage shortly.
+
+[^2]: Not to be confused with generator index $g$.
 
 The bus injection equations are typically arranged as equations for active and reactive power $P + j Q = S$. To describe the power at a given bus $i$, we take the conjugate of Equation {eq}`eq_6_6` and multiply both sides by $V_i$:
 
@@ -261,7 +263,7 @@ Each bus and thus each pair of $(P_i, Q_i)$ equations {eq}`eq_pf` has four varia
 
 What if a bus has both generator(s) and load(s) attached? The net active power $P_i$ must be fixed because the active powers of both the generator(s) and loads(s) are fixed. The net reactive power $Q_i$ must be free to vary because, while the reactive powers of the load(s) are fixed, those of the generator(s) are not. And $|V_i|$ is fixed, just as in a generator bus. Indeed, if we were to model a combined generator/load bus as a separate generator bus $i$ and a separate load bus $j$, connected by a line $(i, j)$ with zero impedance, then $|V_i|$ would end up equalling $|V_j|$ anyway. So, a combined generator/load bus is treated as a generator bus.
 
-And what if a bus has neither generators nor loads attached? In this case, the bus is treated as a load bus with fixed $P^L = 0$ and $Q^L = 0$.
+And what if a bus has neither generators nor loads attached? In this case, the bus is treated as a load bus with fixed $P_i = 0$ and $Q_i = 0$.
 
 **Slack bus.** So far, the classifications of variables as fixed versus free means that the number of free variables equals the number of equations. However, this does not necessarily mean that the system of equations has a solution that is feasible or that it has a solution that is unique. Indeed, with only the two bus types we've defined so far, there is a feasibility issue and a uniqueness issue. Firstly, active power losses due to electrical resistance in the power lines and transformers mean that the total power supplied by the generators does not necessarily equal the total power demanded by the loads plus the power losses. The deficit must be made up for by one or more generators at one or more buses, at which $P$ must thus be free to vary. Otherwise, there would not necessarily be a feasible solution. Secondly, voltage angles are relative, so at one bus, $\delta_i$ must be fixed to $0^\circ$ as a reference against which all other $\delta_i$s are measured. Otherwise, there would be no unique solution. By convention, both the feasibility issue and the uniqueness issue are solved by the same bus. This third type of bus is known as a slack bus, also known as a **swing bus**, **reference bus**, or **Vδ bus**.
 
