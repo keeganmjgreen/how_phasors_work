@@ -1,5 +1,4 @@
 _build/
-.vscode/tasks.json
 *.pyc
 cover/img/
 src/how_phasors_work.egg-info/*

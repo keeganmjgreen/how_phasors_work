@@ -1,0 +1,29 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start Jupyter Book (Web)",
+            "type": "shell",
+            "command": "uvx jupyter-book start",
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated",
+                "close": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build PDF",
+            "type": "shell",
+            "command": "source build_pdf.sh",
+            "presentation": {
+                "reveal": "never",
+                "panel": "dedicated",
+                "close": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
