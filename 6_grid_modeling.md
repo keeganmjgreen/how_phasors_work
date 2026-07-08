@@ -2,11 +2,11 @@
 
 If the example circuits we've seen so far seem complicated to analyze, then this pales in comparison to the complexity of analyzing and operating the electrical grid. The electrical grid may be just another circuit, but it has rapid, far-reaching, and expensive consequences if it fails. If the grid is operated incorrectly, its voltages and frequencies can be put in jeopardy in a matter of seconds or less, creating a risk of cascading failure. Understanding the grid and how it behaves depending on how it's operated is crucial to be able to control it correctly. Grid modeling allows operators to not only stay in control of grid voltages and frequencies, but also to dispatch generators in a way that is cost-optimal.
 
-The grid is modeled as a network of $N$ electrical buses connected by branches. A bus is a shared point of connection that has minimal electrical impedance. Generators and loads are attached to the buses. Each pair of buses $(i, k)$[^1] may be connected by a branch&mdash;such as a power line or transformer&mdash;which has nonzero impedance and can result in voltage and phase differences between buses $i$ and $k$. In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid. The sets of buses and branches are denoted $\mathbf{N}$ and $\mathbf{L}$, respectively.
+The grid is modeled as a network of $N$ electrical buses connected by branches. A bus is a shared point of connection that has minimal electrical impedance. Generators and loads are attached to the buses. Each pair of buses $(i, k)$[^1] may be connected by a branch&mdash;such as a power line or transformer&mdash;which has nonzero impedance and can result in voltage and phase differences between buses $i$ and $k$. In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid. The sets of buses and branches are denoted $\mathcal{N}$ and $\mathcal{L}$, respectively.
 
 [^1]: Index $k$ is used instead of $j$ to distinguish it from the imaginary unit.
 
-For example, consider {ref}`fig_6_1`. It shows a simple electrical grid with three buses $\mathbf{N} = \{1, 2, 3\}$, two generators (at buses $1$ and $2$), and a load (at bus $3$). Buses $1$ and $2$ are connected by a line branch, and buses $2$ and $3$ are connected by a transformer branch. This type of diagram is called a *single-line diagram* because it depicts the parallel conductors in a single-phase system or balanced three-phase system&mdash;like the electrical grid&mdash;as single lines for the sake of simplicity.
+For example, consider {ref}`fig_6_1`. It shows a simple electrical grid with three buses $\mathcal{N} = \{1, 2, 3\}$, two generators (at buses $1$ and $2$), and a load (at bus $3$). Buses $1$ and $2$ are connected by a line branch, and buses $2$ and $3$ are connected by a transformer branch. This type of diagram is called a *single-line diagram* because it depicts the parallel conductors in a single-phase system or balanced three-phase system&mdash;like the electrical grid&mdash;as single lines for the sake of simplicity.
 
 ```{figure} img/fig_6_1.png
 :width: 64%
@@ -82,17 +82,17 @@ $$
 (S_i / V_i)^*
 & = \text{total current out of bus $i$ via $i$-forward branches} \\
 & \, + \text{total current out of bus $i$ via $i$-reverse branches} \\
-& = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! I_{ik} + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! I_{ik}
+& = \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! I_{ik} + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! I_{ik}
 \end{aligned}
 $$
 
-The subscript "$k \! : \! (i, k) \! \in \! \mathbf{L}$" means "for each bus $k$ to which bus $i$ is connected by an $i$-forward branch" and the subscript "$k \! : \! (k, i) \! \in \! \mathbf{L}$" means "for each bus $k$ to which bus $i$ is connected by an $i$-reverse branch". Substituting $I_{ik}$ and $I_{ki}$ from equations {eq}`eq_I_ik` and {eq}`eq_I_ki` gives us:
+The subscript "$k \! : \! (i, k) \! \in \! \mathcal{L}$" means "for each bus $k$ to which bus $i$ is connected by an $i$-forward branch" and the subscript "$k \! : \! (k, i) \! \in \! \mathcal{L}$" means "for each bus $k$ to which bus $i$ is connected by an $i$-reverse branch". Substituting $I_{ik}$ and $I_{ki}$ from equations {eq}`eq_I_ik` and {eq}`eq_I_ki` gives us:
 
 $$
 \begin{aligned}
     (S_i / V_i)^*
-    & = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \left( V_i \, \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik} \right) \\
-    & + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( V_i \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) - V_k \, \frac{1}{a_{ki}} y_{ki} \right)
+    & = \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\! \left( V_i \, \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik} \right) \\
+    & + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \left( V_i \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) - V_k \, \frac{1}{a_{ki}} y_{ki} \right)
 \end{aligned}
 $$
 
@@ -105,15 +105,15 @@ Now we split up the summations such that $V_i$ can be factored out where possibl
 $$
 \begin{aligned}
     (S_i / V_i)^*
-    & = V_i \, \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
-    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k \, \frac{1}{a_{ki}} y_{ki}
+    & = V_i \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & - \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k \, \frac{1}{a_{ki}} y_{ki}
 \end{aligned}
 $$ (eq_sums_split_vi_extracted)
 
 The bus injection model is typically expressed in a way that allows some complexity to be moved into a new $N \! \times \! N$ matrix $Y \!$, called the *admittance matrix*, which allows the above equation to be rewritten succinctly as:
 
 $$
-(S_i / V_i)^* = \sum_{k \in \mathbf{N}} V_k \, Y_{ik}
+(S_i / V_i)^* = \sum_{k \in \mathcal{N}} V_k \, Y_{ik}
 $$ (eq_6_6)
 
 Or, even more simply, as a matrix equation:
@@ -125,7 +125,7 @@ $$
 Where $Y$ is defined as having the following diagonal and off-diagonal elements:
 
 $$
-Y_{ii} = \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right)
+Y_{ii} = \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right)
 $$
 
 $$
@@ -148,19 +148,19 @@ Just as how a branch admittance $y$ can be split into real and imaginary parts $
 The bus injection equations are typically arranged as equations for active and reactive power $P + j Q = S$. To describe the power at a given bus $i$, we take the conjugate of Equation {eq}`eq_6_6` and multiply both sides by $V_i$:
 
 $$
-P_i + j Q_i = \sum_{k \in \mathbf{N}} V_i \, V_k^* \, Y_{ik}^*
+P_i + j Q_i = \sum_{k \in \mathcal{N}} V_i \, V_k^* \, Y_{ik}^*
 $$
 
 Solver software often expects real-valued equations, so we work towards splitting this equation into a real part and an imaginary part. Furthermore, the bus injection model most commonly uses polar coordinates for voltage and rectangular coordinates for admittance. To satisfy this, we substitute $V = |V| \cos \delta + j \, |V| \sin \delta$ and $Y = G + j B$ in the above equation, giving us the following. We will eventually be able to take the imaginary unit $j$ out of the picture.
 
 $$
-P_i + j Q_i = \sum_{k \in \mathbf{N}} (|V_i| \cos \delta_i + j \, |V_i| \sin \delta_i) (|V_k| \cos \delta_k - j \, |V_k| \sin \delta_k) (G_{ik} - j B_{ik})
+P_i + j Q_i = \sum_{k \in \mathcal{N}} (|V_i| \cos \delta_i + j \, |V_i| \sin \delta_i) (|V_k| \cos \delta_k - j \, |V_k| \sin \delta_k) (G_{ik} - j B_{ik})
 $$
 
 Expanding the above equation yields:
 
 $$
-P_i + j Q_i = \sum_{k \in \mathbf{N}} \left(
+P_i + j Q_i = \sum_{k \in \mathcal{N}} \left(
 \begin{aligned}
     & |V_i| |V_k| \cos \delta_i \cos \delta_k - j \, |V_i| |V_k| \cos \delta_i \sin \delta_k \\
     & + j \, |V_i| |V_k| \sin \delta_i \cos \delta_k + |V_i| |V_k| \sin \delta_i \sin \delta_k
@@ -171,13 +171,13 @@ $$
 Applying the angle-difference identities $\cos \alpha \cos \beta + \sin \alpha \sin \beta = \cos(\alpha - \beta)$ and $\sin \alpha \cos \beta - \cos \alpha \sin \beta = \sin(\alpha - \beta)$ gives us:
 
 $$
-P_i + j Q_i = |V_i| \sum_{k \in \mathbf{N}} |V_k| (\cos (\delta_i - \delta_k) + j \sin(\delta_i - \delta_k)) (G_{ik} - j B_{ik})
+P_i + j Q_i = |V_i| \sum_{k \in \mathcal{N}} |V_k| (\cos (\delta_i - \delta_k) + j \sin(\delta_i - \delta_k)) (G_{ik} - j B_{ik})
 $$
 
 Expanding once again yields:
 
 $$
-P_i + j Q_i = |V_i| \sum_{k \in \mathbf{N}} |V_k| \left(
+P_i + j Q_i = |V_i| \sum_{k \in \mathcal{N}} |V_k| \left(
 \begin{aligned}
 & G_{ik} \cos(\delta_i - \delta_k) - j B_{ik} \cos(\delta_i - \delta_k) \\
 & + j G_{ik} \sin(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)
@@ -190,8 +190,8 @@ Finally, we are able to split this complex-valued equation into the following re
 $$
 \boxed{
 \begin{aligned}
-    P_i & = |V_i| \sum_{k \in \mathbf{N}} |V_k| (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) \\
-    Q_i & = |V_i| \sum_{k \in \mathbf{N}} |V_k| (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k))
+    P_i & = |V_i| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) \\
+    Q_i & = |V_i| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k))
 \end{aligned}
 }
 $$ (eq_pf)
@@ -222,8 +222,8 @@ To express the power flow equations in the per-unit system, we select the nomina
 $$
 \begin{aligned}
     & \left( \frac{S_i^\text{pu} S^\text{base}}{V_i^\text{pu} V_i^\text{base}} \right)^{\! *} \\
-    & = V_i^\text{pu} V_i^\text{base} \, \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu} a_{ik}^\text{base}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
-    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{(a_{ik}^\text{pu} a_{ik}^\text{base})^*} \, y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{a_{ki}^\text{pu} a_{ki}^\text{base}} \, y_{ki}
+    & = V_i^\text{pu} V_i^\text{base} \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu} a_{ik}^\text{base}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & - \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{(a_{ik}^\text{pu} a_{ik}^\text{base})^*} \, y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{a_{ki}^\text{pu} a_{ki}^\text{base}} \, y_{ki}
 \end{aligned}
 $$
 
@@ -232,8 +232,8 @@ Substituting $a_{ik}^\text{base} = V_i^\text{base} / V_k^\text{base}$, multiplyi
 $$
 \begin{aligned}
     & \left( \frac{S_i^\text{pu}}{V_i^\text{pu}} \right)^{\! *} \\
-    & = V_i^\text{pu} \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \frac{(V_k^\text{base})^2}{S^\text{base}} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\! \frac{(V_i^\text{base})^2}{S^\text{base}} \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
-    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}
+    & = V_i^\text{pu} \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \frac{(V_k^\text{base})^2}{S^\text{base}} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \frac{(V_i^\text{base})^2}{S^\text{base}} \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & - \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}
 \end{aligned}
 $$
 
@@ -242,8 +242,8 @@ We now apply the per-unit system to the admittances, defining $y_{ik} = y_{ik}^\
 $$
 \begin{aligned}
     \left( \frac{S_i^\text{pu}}{V_i^\text{pu}} \right)^{\! *}
-    & = V_i^\text{pu} \Biggl( \, \sum_{k : (i, k) \in \mathbf{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \, \Biggl( \frac{y_{ik}^\text{Sh,pu}}{2} + y_{ik}^\text{pu} \Biggr) + \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \! \Biggl( \frac{y_{ki}^\text{Sh,pu}}{2} + y_{ki}^\text{pu} \Biggr) \Biggr) \\
-    & - \!\!\! \sum_{k : (i, k) \in \mathbf{L}} \!\!\! V_k^\text{pu} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik}^\text{pu} - \!\!\! \sum_{k : (k, i) \in \mathbf{L}} \!\!\! V_k^\text{pu} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}^\text{pu}
+    & = V_i^\text{pu} \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \, \Biggl( \frac{y_{ik}^\text{Sh,pu}}{2} + y_{ik}^\text{pu} \Biggr) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \! \Biggl( \frac{y_{ki}^\text{Sh,pu}}{2} + y_{ki}^\text{pu} \Biggr) \Biggr) \\
+    & - \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik}^\text{pu} - \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}^\text{pu}
 \end{aligned}
 $$
 
