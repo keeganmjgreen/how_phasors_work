@@ -20,6 +20,7 @@
         "bigr",
         "checkodesol",
         "connectionstyle",
+        "dispatchable",
         "dsolve",
         "evalf",
         "figclass",
@@ -60,6 +61,7 @@
         "pycache",
         "pydantic",
         "schemdraw",
+        "SCOPF",
         "scriptsize",
         "setpoints",
         "sharex",
@@ -87,11 +89,21 @@
         "yticks"
     ],
     "editor.rulers": [],
+    "emeraldwalk.runonsave": {
+        "commands": [
+            {
+                "cmd": "source build_pdf.sh",
+                "match": "\\.(ipynb|md)$"
+            }
+        ]
+    },
     "files.exclude": {
         "**/__pycache__": true
     },
     "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "standard",
     "python.defaultInterpreterPath": "~/venvs/how_phasors_work/bin/python",
-    "python.terminal.activateEnvironment": true
+    "python.terminal.activateEnvironment": true,
+    "breadcrumbs.enabled": false,
+    "editor.stickyScroll.enabled": false
 }
