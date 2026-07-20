@@ -121,10 +121,10 @@ $$ (eq_6_6)
 Or, even more simply, as a matrix equation:
 
 $$
-(S / V)^* = Y \!\: V
+S = (Y \!\: V)^* \circ V
 $$
 
-Where $Y$ is defined as having the following diagonal and off-diagonal elements:
+where "$\displaystyle\circ$" indicates element-wise vector multiplication and $Y$ is defined as having the following diagonal and off-diagonal elements:
 
 $$
 Y_{ii} = \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right)
