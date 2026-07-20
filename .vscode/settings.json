@@ -93,7 +93,7 @@
         "commands": [
             {
                 "cmd": "source build_pdf.sh",
-                "match": "\\.(ipynb|md)$"
+                "match": "\\.(ipynb|md|tex)$"
             }
         ]
     },

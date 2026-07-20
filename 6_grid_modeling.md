@@ -200,10 +200,6 @@ $$
 }
 $$ (eq_pf)
 
-&nbsp;
-
-&nbsp;
-
 ### Applying the Per-Unit System
 
 The per-unit system is the practice in electrical engineering of normalizing quantities like voltage and power to a dimensionless value between 0 and 1. Each quantity $x$ is expressed as a fraction, denoted $x^\text{pu}$, of some base quantity, $x^\text{base}$, such that $x = x^\text{pu} x^\text{base}$. This can be done with many electrical engineering quantities:
@@ -296,6 +292,8 @@ As an example of how these bus classifications would apply, consider the electri
 
 Single-line diagram of another example electrical grid. 
 ```
+
+&nbsp;
 
 <!-- ### Linearized Power Flow -->
 

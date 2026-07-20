@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[oneside]{book}
 \usepackage{fancyhdr}
 \usepackage{floatrow} \floatsetup[table]{font={footnotesize}} % Small table text.
 \usepackage{array}
@@ -30,18 +30,18 @@
 \makeatletter
 
 % Headings in marginalia column:
-% Sub-sections:
+% Sections:
+\renewcommand{\section}[1]{
+  \refstepcounter{section}
+  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}
+  \marginnote{\raggedleft\bfseries\large #1}[\parskip]
+  \nopagebreak
+}
+% Subsections:
 \renewcommand{\subsection}[1]{
   \refstepcounter{subsection}
   \addcontentsline{toc}{subsection}{\protect\numberline{\thesubsection}#1}
-  \marginnote{\raggedleft\bfseries\normalsize #1}[\parskip]
-  \nopagebreak
-}
-% Sub-sub-sections:
-\renewcommand{\subsubsection}[1]{
-  \refstepcounter{subsubsection}
-  \addcontentsline{toc}{subsubsection}{\protect\numberline{\thesubsubsection}#1}
-  \marginnote{\raggedleft\itshape\normalsize #1}[\parskip]
+  \marginnote{\raggedleft\itshape\large #1}[\parskip]
   \nopagebreak
 }
 
@@ -85,6 +85,31 @@
 \begin{document}
 
 \includepdf{/Users/keegan_green/workspace/src/how_phasors_work/cover/cover.pdf}
+
+\newpage
+
+This book is a work in progress. Existing chapters will be revised, and new chapters will be added. Readers are encouraged to provide feedback at:
+
+\href{https://github.com/keeganmjgreen/how_phasors_work/issues}{github.com/keeganmjgreen/how\_phasors\_work/issues}
+
+The latest HTML version of this book is available at:
+
+\href{https://keeganmjgreen.github.io/how_phasors_work}{keeganmjgreen.github.io/how\_phasors\_work}
+
+The latest PDF version is available at:
+
+\href{https://raw.githubusercontent.com/keeganmjgreen/how_phasors_work/refs/heads/main/how_phasors_work.pdf}{github.com/keeganmjgreen/how\_phasors\_work/} \\ \href{https://raw.githubusercontent.com/keeganmjgreen/how_phasors_work/refs/heads/main/how_phasors_work.pdf}{blob/main/how\_phasors\_work.pdf}
+
+Cover image by Adam Hilles on Unsplash.
+
+\copyright \ Copyright 2025 Keegan Green.
+
+\newpage
+
+\tableofcontents
+
+% \newpage \mbox{}
+\newpage
 
 [-CONTENT-]
 
