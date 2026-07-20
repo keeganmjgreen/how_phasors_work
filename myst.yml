@@ -26,6 +26,9 @@ project:
           level: 0
         - file: 6_grid_modeling.md
           level: 0
+  downloads:
+    - file: ./how_phasors_work.pdf
+      title: Download Book as PDF
 site:
   options:
     logo: logo/logo.png
