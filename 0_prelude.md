@@ -8,4 +8,4 @@
 > 
 > Cover image by Adam Hilles on Unsplash.
 > 
-> © Copyright 2025 Keegan Green.
+> © 2025&ndash;2026 Keegan Green
