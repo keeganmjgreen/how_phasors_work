@@ -1,10 +1,9 @@
 ---
+title: How Phasors Work
 subtitle: An electrical engineering book about phasors and applying AC circuit analysis to the electrical grid.
 ---
 
-# How Phasors Work
-
-![](img/cover.jpg)
+![](img/pdf_fanout.png)
 
 This book is a work in progress. Existing chapters will be revised, and new chapters will be added. Readers are encouraged to provide feedback [here](https://github.com/keeganmjgreen/how_phasors_work/issues).
 
