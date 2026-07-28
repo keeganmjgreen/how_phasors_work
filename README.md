@@ -8,7 +8,7 @@ An electrical engineering book about phasors and applying AC circuit analysis to
 
 This book is a work in progress. Existing chapters will be revised, and new chapters will be added. Readers are encouraged to provide feedback in [Issues](https://github.com/keeganmjgreen/how_phasors_work/issues).
 
-Cover image by Adam Hilles on Unsplash.
+Cover image by Rodion Kutsaiev on Unsplash.
 
 © 2025&ndash;2026 Keegan Green
 
