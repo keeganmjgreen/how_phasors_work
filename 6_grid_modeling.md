@@ -2,7 +2,7 @@
 
 If the example circuits we've seen so far seem complicated to analyze, then this pales in comparison to the complexity of analyzing and operating the electrical grid. The electrical grid may be just another circuit, but it has rapid, far-reaching, and expensive consequences if it fails. If the grid is operated incorrectly, its voltages and frequencies can be put in jeopardy in a matter of seconds or less, creating a risk of cascading failure. Understanding the grid and how it behaves depending on how it's operated is crucial to be able to control it correctly. Grid modeling allows operators to not only stay in control of grid voltages and frequencies, but also to dispatch generators in a way that is cost-optimal.
 
-The grid is modeled as a network of $N$ electrical buses connected by branches. A bus is a shared point of connection that has minimal electrical impedance. Generators and loads are attached to the buses. Each pair of buses $(i, k)$[^1] may be connected by a branch&mdash;such as a power line or transformer&mdash;which has nonzero impedance and can result in voltage and phase differences between buses $i$ and $k$. In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid. The sets of buses and branches are denoted $\mathcal{N}$ and $\mathcal{L}$, respectively.
+The grid is modeled as a network of $N$ electrical buses connected by branches. [@PowerSystemModel] A bus is a shared point of connection that has minimal electrical impedance. Generators and loads are attached to the buses. Each pair of buses $(i, k)$[^1] may be connected by a branch&mdash;such as a power line or transformer&mdash;which has nonzero impedance and can result in voltage and phase differences between buses $i$ and $k$. In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid. The sets of buses and branches are denoted $\mathcal{N}$ and $\mathcal{L}$, respectively.
 
 [^1]: Index $k$ is used instead of $j$ to distinguish it from the imaginary unit.
 
@@ -50,7 +50,7 @@ At any given time, a grid operator must dispatch generators to serve the loads i
 2. Validating that not too much current is flowing through a given line or transformer. This is to avoid overloading/overheating it.
 3. Validating that voltages are within acceptable margins. This is for the sake of the loads.
 
-The task of determining how power will flow through the grid and whether it will satisfy the loads is known as the power flow (PF) problem.
+The task of determining how power will flow through the grid and whether it will satisfy the loads is known as the power flow (PF) problem [@monesGentleIntroductionPower2020;@PowerFlowDocumentation].
 
 Because the grid is a circuit, we can solve the power flow problem the same as we solve any other circuit, by doing nodal analysis and solving a system of KCL equations to determine the voltage at each bus, denoted $V_{\! i} = |V_{\! i}| \angle \delta_i$. In the three-phase case, the voltage magnitude $|V_{\! i}|$ can be assumed to be the same across the three phases at each bus, and the voltage angle $\delta_i$ can be taken for the first phase only, knowing that the other two phases will be $\pm 2 \pi / 3$ radians apart.
 
@@ -216,7 +216,7 @@ $$
 
 For example, in the per-unit system with a base of $S^\text{base} = 100 \ \mathrm{MV\!A}$, a quantity of $S = 90 \ \mathrm{MV\!A}$ would become $S^\text{pu} = 0.9 \ \mathrm{per \ unit}$ or $0.9 \ \mathrm{pu}$.
 
-The per-unit system makes it easier to interpret quantities relative to the voltage and power ratings of equipment such as buses and generators. And when applied to the power flow problem, the per-unit system offers additional advantages:
+The per-unit system makes it easier to interpret quantities relative to the voltage and power ratings of equipment such as buses and generators. And when applied to the power flow problem, the per-unit system offers additional advantages [@PerUnitSystemJuliaGrid]:
 
 - It improves the problem's stability when solving using numerical methods.
 - As we will see, it allows most transformer branches to be treated simply as line branches because the transformer voltage ratio becomes $1\!:\!1$ in the per-unit system.
@@ -333,13 +333,13 @@ $$
 
 How the cost function $C_g$ is formulated depends on the application. If the application is research or planning purposes, then a quadratic fit is typically used to approximately model how the cost per MWh increases as $P_{\! g}$ increases. For day-to-day and real-time dispatch by the grid operator, a piecewise linear function is often used for greater accuracy.
 
-So far, we have assumed that all generators are dispatchable (controllable power) and that all loads are non-dispatchable (uncontrollable power). There do exist non-dispatchable generators whose power production *cannot* be controlled, as well as dispatchable loads (such as smart thermostats and smart EV charging in some cases) whose power consumption *can* be controlled by the grid operator. However, this does not mean that the grid model discussed so far cannot represent these resources. Non-dis&shy;patchable generators can be modeled as loads whose fixed power is positive rather than negative. As for dispatchable loads, they can be modeled as generators whose maximum power is negative rather than positive, and with cost functions that intake and output negative values. This negative cost&mdash;associated with consuming, rather than producing&mdash;is called *utility* in economics. Utility quantifies the economic value delivered to consumers (loads) when they are dispatched by the grid operator, in contrast to the cost incurred by producers (generators) by being dispatched.[^3]
+So far, we have assumed that all generators are dispatchable (controllable power) and that all loads are non-dispatchable (uncontrollable power). There do exist non-dispatchable generators whose power production *cannot* be controlled, as well as dispatchable loads (such as smart thermostats and smart EV charging in some cases) whose power consumption *can* be controlled by the grid operator. [@biddleUnderstandingDifferencesNonDispatchable2024] However, this does not mean that the grid model discussed so far cannot represent these resources. Non-dis&shy;patchable generators can be modeled as loads whose fixed power is positive rather than negative. As for dispatchable loads, they can be modeled as generators whose maximum power is negative rather than positive, and with cost functions that intake and output negative values. This negative cost&mdash;associated with consuming, rather than producing&mdash;is called *utility* in economics. Utility quantifies the economic value delivered to consumers (loads) when they are dispatched by the grid operator, in contrast to the cost incurred by producers (generators) by being dispatched.[^3]
 
 [^3]: To learn more about the economics of operating the electrical grid, see [How Electricity Markets Work](https://keeganmjgreen.github.io/ontario_electricity_market/).
 
 ## The Optimal Power Flow (OPF) Problem
 
-Not just any solution to the economic dispatch problem will do. Operating costs cannot be minimized without ensuring that the setpoints are valid per the power flow equations {eq}`eq_pf` and the criteria in [the previous section](#power-flow-validation) (equations {eq}`pf_criterion_1`, {eq}`pf_criterion_2`, {eq}`pf_criterion_3`). These become equality and inequality constraints in the optimization problem, respectively. The result of pairing the objective function for economic dispatch with the power flow constraints is known as the optimal power flow (OPF) problem:
+Not just any solution to the economic dispatch problem will do. Operating costs cannot be minimized without ensuring that the setpoints are valid per the power flow equations {eq}`eq_pf` and the criteria in [the previous section](#power-flow-validation) (equations {eq}`pf_criterion_1`, {eq}`pf_criterion_2`, {eq}`pf_criterion_3`). These become equality and inequality constraints in the optimization problem, respectively. The result of pairing the objective function for economic dispatch with the power flow constraints is known as the optimal power flow (OPF) problem [@frankIntroductionOptimalPower2016;@monesGentleIntroductionOptimal2021]:
 
 $$
 \boxed{ \quad
@@ -375,7 +375,7 @@ $$
 w_{gt} S_g^\text{min} \leq S_{gt} \leq w_{gt} S_g^\text{max}
 $$
 
-The variant of the OPF problem that includes standby, startup, and shutdown costs is thus a scheduling problem, and is known as the unit commitment (UC) problem. *Unit commitment* refers to whether a generating unit (that is, a generator) has committed to be running&mdash;and thus able to supply power&mdash;at a given time.
+The variant of the OPF problem that includes standby, startup, and shutdown costs is thus a scheduling problem, and is known as the unit commitment (UC) problem [@UnitCommitmentDocumentation]. *Unit commitment* refers to whether a generating unit (that is, a generator) has committed to be running&mdash;and thus able to supply power&mdash;at a given time.
 
 *Standby cost.* In addition to a power cost, a generator might have a cost that is incurred as long as it is running, regardless of the generator's setpoint. This is known as standby cost, $C_g^\text{SB}$, and it disincentivizes a generator from being run (and thus from generating *any* power) if there is a favorable alternative in terms of cost. For example, the grid operator may be willing to pay a disproportionately higher price to operate an already-running generator at a higher setpoint, rather than running a second generator to supply the extra power, if that second generator's standby cost is high. Accounting for standby cost, the objective function becomes:
 
