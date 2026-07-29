@@ -284,13 +284,13 @@ And what if a bus has neither generators nor loads attached? In this case, the b
 Bus types and their variable classifications.
 ```
 
-As an example of how these bus classifications would apply, consider the electrical grid of {ref}`fig_6_4`. Buses 2 and 3 are both load buses (even though bus 2 has no attached load). Either of buses 1 and 4 can be a generator bus (even though bus 4 has an attached load), but one of them must be a slack bus.
+As an example of how these bus classifications would apply, consider the electrical grid of {ref}`fig_6_5`. Buses 2 and 3 are both load buses (even though bus 2 has no attached load). Either of buses 1 and 4 can be a generator bus (even though bus 4 has an attached load), but one of them must be a slack bus.
 
 ```{figure} img/fig_6_5.png
 :width: 64%
 :label: fig_6_5
 
-Single-line diagram of another example electrical grid. 
+Single-line diagram of another example electrical grid.
 ```
 
 &nbsp;
