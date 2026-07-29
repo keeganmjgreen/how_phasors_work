@@ -420,4 +420,13 @@ $$
 
 <!-- ### Linearized Optimal Power Flow -->
 
-<!-- https://www.pcienergysolutions.com/2024/05/01/understanding-the-differences-between-non-dispatchable-and-dispatchable-generation/ -->
+## Summary
+
+We've introduced many concepts; {ref}`fig_6_6` provides a summary of these concepts and how they relate to each other.
+
+```{figure} img/fig_6_6.png
+:width: 100%
+:label: fig_6_6
+
+This chapter's concepts and how they inter-relate.
+```

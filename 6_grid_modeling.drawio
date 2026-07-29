@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" version="29.3.6">
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.6 Chrome/140.0.7339.249 Electron/38.8.0 Safari/537.36" pages="2">
   <diagram name="Page-1" id="Qn4uHLWJwB_CCdevIg2T">
     <mxGraphModel dx="1201" dy="772" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1920" pageHeight="1200" math="1" shadow="0">
       <root>
@@ -1071,6 +1071,117 @@
         </mxCell>
         <mxCell id="0a-IjL1IJfEAdpXUe0zG-38" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;rounded=0;fontSize=12;" value="$$\text{Load}$$" vertex="1">
           <mxGeometry height="20" width="35" x="150" y="1065" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="Qq7_HWsQ8oPrXn-WNtxU" name="Page-2">
+    <mxGraphModel dx="849" dy="551" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="1" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="320" width="140" x="700" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-2" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;" target="2R9YrIOI1QjSAHMKLIeD-6" value="$$\text{Formulates}$$">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Bus injection\\model}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="710" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-4" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;" target="2R9YrIOI1QjSAHMKLIeD-10" value="$$\text{Defines}$$">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-5" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;curved=0;" target="2R9YrIOI1QjSAHMKLIeD-19" value="$$\text{Constrains}$$">
+          <mxGeometry relative="1" x="0.9" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{System of\\power flow\\equations}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="710" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-7" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;" target="2R9YrIOI1QjSAHMKLIeD-14" value="$$\text{Checked by}$$">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Slack generation,\\currents, voltages}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="710" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-9" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;" target="2R9YrIOI1QjSAHMKLIeD-8" value="$$\text{Solves for}$$">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Power flow\\problem}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="710" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-11" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;" target="2R9YrIOI1QjSAHMKLIeD-1" value="$$\text{Checked by}$$">
+          <mxGeometry relative="1" x="0.011" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Dispatch}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="480" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-13" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-14" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;curved=0;" target="2R9YrIOI1QjSAHMKLIeD-19" value="$$\text{Constrains}$$">
+          <mxGeometry relative="1" x="0.875" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Power flow\\validation}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="710" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-15" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;" target="2R9YrIOI1QjSAHMKLIeD-12" value="$$\text{Determines}$$">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-16" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-17" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="2R9YrIOI1QjSAHMKLIeD-19" value="$$\text{Defines the\\objective\\function of}$$">
+          <mxGeometry relative="1" x="-0.0044" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-17" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Economic\\dispatch\\problem}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="480" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-18" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;" target="2R9YrIOI1QjSAHMKLIeD-12" value="$$\text{Determines}$$">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Optimal power\\flow problem}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="260" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-20" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-21" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" target="2R9YrIOI1QjSAHMKLIeD-19" value="&lt;span style=&quot;&quot;&gt;$$\text{Constrains}$$&lt;/span&gt;">
+          <mxGeometry relative="1" x="0.0028" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-21" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Ramp rate limits}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="30" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-22" edge="1" parent="1" source="2R9YrIOI1QjSAHMKLIeD-23" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#FFFFFF88;endArrow=classicThin;endFill=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" target="2R9YrIOI1QjSAHMKLIeD-19" value="&lt;span style=&quot;&quot;&gt;$$\text{Constrains}$$&lt;/span&gt;">
+          <mxGeometry relative="1" x="-0.0022" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-23" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="" vertex="1">
+          <mxGeometry height="250" width="140" x="20" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-24" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="$$\text{Unit commitment\\constraints}$$" vertex="1">
+          <mxGeometry height="40" width="140" x="20" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-25" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Standby,\\startup, and\\shutdown costs}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="30" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-26" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Startup and\\shutdown ramp\\rate limits}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="30" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="2R9YrIOI1QjSAHMKLIeD-27" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="$$\text{Minimum\\uptime/downtime}$$" vertex="1">
+          <mxGeometry height="60" width="120" x="30" y="500" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
