@@ -194,8 +194,8 @@ Finally, we are able to split this complex-valued equation into the following re
 $$
 \boxed{
 \begin{aligned}
-    P_i & = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) \\
-    Q_i & = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k))
+    P_i & = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)) \\
+    Q_i & = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k))
 \end{aligned}
 }
 $$ (eq_pf)
