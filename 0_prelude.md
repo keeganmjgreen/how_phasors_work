@@ -8,7 +8,7 @@ author: Keegan Trujillo-Green, BASc Mechatronic Systems Engineering
 
 ![](img/pdf_fanout.png)
 
-::::{grid} 1 1 2 3
+::::{grid}
 
 :::{card}
 :header: Introduction<br>&nbsp;
@@ -45,6 +45,7 @@ Motivation for three-phase power. Wye versus delta configurations. Three-phase p
 :link: /grid-modeling
 Bus injection model. Power flow, optimal power flow, economic dispatch, and unit commitment problems.
 :::
+
 ::::
 
 This book is a work in progress. Existing chapters will be revised, and new chapters will be added. Readers are encouraged to provide feedback [here](https://github.com/keeganmjgreen/how_phasors_work/issues).

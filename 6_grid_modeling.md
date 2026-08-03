@@ -59,9 +59,9 @@ For generality, we will model all branches as transformer branches. For line bra
 $$
 \begin{aligned}
 & - \!\! I_{ik}' + V_{\! i}' \, \frac{y_{ik}^\text{Sh}}{2} + (V_{\! i}' - V_k) \, y_{ik} = 0 \\
-& \implies I_{ik}' = V_{\! i}' \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
-& \implies I_{ik} a_{ik}^* = V_{\! i} \, \frac{1}{a_{ik}} \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
-& \implies I_{ik} = V_{ik} \, \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik}
+& \implies I_{ik}' = V_{\! i}' \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
+& \implies I_{ik} a_{ik}^* = V_{\! i} \, \frac{1}{a_{ik}} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
+& \implies I_{ik} = V_{\! i} \, \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik}
 \end{aligned}
 $$ (eq_I_ik)
 
@@ -365,7 +365,7 @@ $$
 \dot{P}_g^\text{D} \leq \frac{P_{gt} - P_{g,\,t-1}}{\Delta t} \leq \dot{P}_g^\text{U}
 $$
 
-Ramp rate limits $\dot{P}_g^\text{U}$ and $\dot{P}_g^\text{D}$ are positive and negative values, respectively. For a given $t$, only one side of this two-sides inequality constraint can be active.
+Ramp rate limits $\dot{P}_g^\text{U}$ and $\dot{P}_g^\text{D}$ are positive and negative values, respectively. For a given $t$, only one side of this two-sided inequality constraint can be active.
 
 ### The Unit Commitment Problem
 
@@ -377,7 +377,7 @@ $$
 
 The variant of the OPF problem that includes standby, startup, and shutdown costs is thus a scheduling problem, and is known as the unit commitment (UC) problem [@UnitCommitmentDocumentation]. *Unit commitment* refers to whether a generating unit (that is, a generator) has committed to be running&mdash;and thus able to supply power&mdash;at a given time.
 
-*Standby cost.* In addition to a power cost, a generator might have a cost that is incurred as long as it is running, regardless of the generator's setpoint. This is known as standby cost, $C_g^\text{SB}$, and it disincentivizes a generator from being run (and thus from generating *any* power) if there is a favorable alternative in terms of cost. For example, the grid operator may be willing to pay a disproportionately higher price to operate an already-running generator at a higher setpoint, rather than running a second generator to supply the extra power, if that second generator's standby cost is high. Accounting for standby cost, the objective function becomes:
+*Standby cost.* In addition to a power cost, a generator might have a cost that is incurred as long as it is running, regardless of the generator's setpoint. This is known as standby cost, $C_g^\text{SB}$, and it disincentivizes a generator from being run (and thus from generating *any* power) if there is a favorable alternative in terms of cost. For example, the grid operator may be willing to pay a disproportionately higher price to operate an already-running generator at a higher setpoint, rather than running a second generator to supply the extra power, if that second generator's standby cost is high. Accounting for standby cost, the objective becomes:
 
 $$
 \min_{\mathbf{P}, \, \mathbf{w}} \sum_{t \in \mathcal{T}} \sum_{g \in \mathcal{G}} w_{gt} \left( C_g \bigl( P_{\! g} \bigr) + C_g^\text{SB} \right)
@@ -391,7 +391,7 @@ $$
 
 where $w_{gt} (w_{g,\,t-1} - 1)$ and $(w_{gt} - 1) w_{g,\,t-1}$ indicate whether a generator has started up or shut down from one interval to the next, respectively.
 
-*Startup and shutdown ramp rate limits.* Some generators have ramp rate limits that apply specifically when starting up or shutting down, which can be accounted for using the following constraints:
+*Startup and shutdown ramp rate limits.* Some generators have stricter ramp rate limits that apply specifically when starting up or shutting down, which can be accounted for using the following constraints:
 
 $$
 \begin{gathered}
