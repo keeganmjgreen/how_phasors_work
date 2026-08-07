@@ -46,10 +46,14 @@ class Voltage(Symbolic):
 
 @dataclass
 class Current(Symbolic):
-    terminal: Term
+    """A positive value indicates current flowing from the `positive` terminal to the `negative`
+    terminal.
+    """
+
+    component: BaseComponent
 
     def __str__(self) -> str:
-        return f"({self.terminal} current)"
+        return f"({self.component} current)"
 
 
 @dataclass
@@ -57,12 +61,12 @@ class Node:
     name: str
     is_ground: bool = False
     voltage: Voltage = field(init=False)
-    connected_terminals: list[Term] = field(init=False)
+    connected_components: list[BaseComponent] = field(init=False)
 
     def __post_init__(self):
         self.voltage = Voltage(node=self)
         # Appended to by `BaseComponent.__post_init__`s:
-        self.connected_terminals = []
+        self.connected_components = []
 
     def __str__(self) -> str:
         return f"node {self.name}"
@@ -71,93 +75,38 @@ class Node:
         return hash(self.name)
 
     @property
-    def currents(self) -> list[Current]:
-        return [t.current for t in self.connected_terminals]
-
-    @property
-    def equations(self):
+    def equation(self):
         if self.is_ground:
-            equations = [self.voltage.variable]
+            return self.voltage.variable
         else:
-            equations = [sum(c.variable for c in self.currents)]  # type: ignore
-        return equations
-
-
-@dataclass
-class Term:
-    """A component terminal."""
-
-    connected_node: Node
-
-    current: Current = field(init=False)
-
-    # Set by `BaseComponent._name_terminals`:
-    name: str = field(init=False)
-    # Set by `BaseComponent.__post_init__`s:
-    component: BaseComponent = field(init=False)
-
-    def __post_init__(self):
-        self.current = Current(terminal=self)
-
-    def __str__(self) -> str:
-        return f"{self.component.name} {self.name} terminal"
-
-    def __repr__(self) -> str:
-        return f"({self})"
-
-    @property
-    def voltage(self) -> Voltage:
-        return self.connected_node.voltage
+            return sum(
+                c.current.variable * (1 if c.positive is self else -1)  # type: ignore
+                for c in self.connected_components
+            )
 
 
 @dataclass(repr=False)
 class BaseComponent(abc.ABC):
     name: str
-    negative: Term
-    positive: Term
+    negative: Node
+    positive: Node
+    current: Current = field(init=False)
 
     def __repr__(self) -> str:
         return f"({type(self)} {self.name})"
 
     @property
-    def terminals(self) -> list[Term]:
+    def _connected_nodes(self) -> list[Node]:
         return [self.negative, self.positive]
 
-    @property
-    def _connected_nodes(self) -> list[Node]:
-        return [t.connected_node for t in self.terminals]
-
-    @property
-    def currents(self) -> list[Current]:
-        return [t.current for t in self.terminals]
-
     def __post_init__(self):
-        self._name_terminals()
-        for terminal in self.terminals:
-            terminal.component = self
-        for terminal in self.terminals:
-            terminal.connected_node.connected_terminals.append(terminal)
-
-    def _name_terminals(self) -> None:
-        self.negative.name = "negative"
-        self.positive.name = "positive"
-
-    def all_equations(self, frequency_rad_per_s: float):
-        return [
-            sum(c.variable for c in self.currents),  # type: ignore
-            *self._equations(frequency_rad_per_s),
-        ]
+        self.current = Current(component=self)
+        for node in self._connected_nodes:
+            node.connected_components.append(self)
 
     @abc.abstractmethod
-    def _equations(self, frequency_rad_per_s: float):
+    def _equation(self, frequency_rad_per_s: float):
         raise NotImplementedError
-
-    @property
-    def _current(self) -> Current:
-        """A positive value indicates current flowing from the `positive` terminal to the `negative`
-        terminal.
-        """
-        return self.negative.current
 
     @property
     def _voltage_difference(self):
@@ -176,48 +125,48 @@ class BaseComponent(abc.ABC):
 class VoltageSource(BaseComponent):
     voltage: Phasor
 
-    def _equations(self, frequency_rad_per_s: float):
-        return [self._voltage_difference - self.voltage.to_complex()]
+    def _equation(self, frequency_rad_per_s: float):
+        return self._voltage_difference - self.voltage.to_complex()
 
 
 @dataclass(repr=False)
 class CurrentSource(BaseComponent):
-    current: Phasor
+    current: Phasor  # type: ignore
 
-    def _equations(self, frequency_rad_per_s: float):
-        return [self._current.variable - self.current.to_complex()]  # type: ignore
+    def _equation(self, frequency_rad_per_s: float):
+        return super().current.variable - self.current.to_complex()  # type: ignore
 
 
 @dataclass(repr=False)
 class Resistor(BaseComponent):
     resistance_ohm: float
 
-    def _equations(self, frequency_rad_per_s: float):
-        return [
-            self._voltage_difference - self._current.variable * self.resistance_ohm  # type: ignore
-        ]
+    def _equation(self, frequency_rad_per_s: float):
+        return (
+            self._voltage_difference - self.current.variable * self.resistance_ohm  # type: ignore
+        )
 
 
 @dataclass(repr=False)
 class Inductor(BaseComponent):
     inductance_h: float
 
-    def _equations(self, frequency_rad_per_s: float):
-        return [
+    def _equation(self, frequency_rad_per_s: float):
+        return (
             self._voltage_difference
-            - self._current.variable * (1j * frequency_rad_per_s * self.inductance_h)  # type: ignore
-        ]
+            - self.current.variable * (1j * frequency_rad_per_s * self.inductance_h)  # type: ignore
+        )
 
 
 @dataclass(repr=False)
 class Capacitor(BaseComponent):
     capacitance_f: float
 
-    def _equations(self, frequency_rad_per_s: float):
-        return [
+    def _equation(self, frequency_rad_per_s: float):
+        return (
             self._voltage_difference
-            - self._current.variable * -1j / (frequency_rad_per_s * self.capacitance_f)  # type: ignore
-        ]
+            - self.current.variable * -1j / (frequency_rad_per_s * self.capacitance_f)  # type: ignore
+        )
 
 
 @dataclass
@@ -234,8 +183,7 @@ class AcCircuitSolver:
         for n in self._connected_nodes:
             symbolics.append(n.voltage)
         for c in self.components:
-            for terminal in c.terminals:
-                symbolics.append(terminal.current)
+            symbolics.append(Current(c))
         return symbolics
 
     @property
@@ -256,10 +204,10 @@ class AcCircuitSolver:
     def _equations(self):
         equations = []
         for n in self._connected_nodes:
-            equations += n.equations
+            equations.append(n.equation)
         for c in self.components:
-            equations += c.all_equations(
-                frequency_rad_per_s=(2 * pi * self.frequency_hz)
+            equations.append(
+                c._equation(frequency_rad_per_s=(2 * pi * self.frequency_hz))
             )
         return equations
 
@@ -272,14 +220,12 @@ def main() -> None:
     solver = AcCircuitSolver(
         frequency_hz=(3 / (2 * pi)),
         components=[
-            vs1 := VoltageSource(
-                "Vs1", Term(vs1n), Term(vs1p), voltage=Phasor(magnitude=1)
-            ),
-            vs2 := VoltageSource("Vs2", Term(b), Term(a), voltage=Phasor(magnitude=2)),
-            r1 := Resistor("R1", Term(b), Term(vs1p), resistance_ohm=4),
-            r2 := Resistor("R2", Term(vs1n), Term(a), resistance_ohm=5),
-            l := Inductor("L", Term(a), Term(vs1p), inductance_h=6),
-            c := Capacitor("C", Term(vs1n), Term(b), capacitance_f=7),
+            vs1 := VoltageSource("Vs1", vs1n, vs1p, voltage=Phasor(magnitude=1)),
+            vs2 := VoltageSource("Vs2", b, a, voltage=Phasor(magnitude=2)),
+            r1 := Resistor("R1", b, vs1p, resistance_ohm=4),
+            r2 := Resistor("R2", vs1n, a, resistance_ohm=5),
+            l := Inductor("L", a, vs1p, inductance_h=6),
+            c := Capacitor("C", vs1n, b, capacitance_f=7),
         ],
     )
     solver.solve()
