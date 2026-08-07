@@ -13,16 +13,16 @@ class Phasor:
     magnitude: float
     phase_deg: float = 0.0
 
+    @property
+    def phase_rad(self) -> float:
+        return radians(self.phase_deg)
+
     @classmethod
     def from_complex(cls, value: complex) -> Self:
         return cls(
             magnitude=abs(value),
             phase_deg=degrees(atan2(value.real, value.imag)),
         )
-
-    @property
-    def phase_rad(self) -> float:
-        return radians(self.phase_deg)
 
     def to_complex(self) -> complex:
         return self.magnitude * (
