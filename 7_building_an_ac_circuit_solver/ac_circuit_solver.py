@@ -16,7 +16,8 @@ class Phasor:
     @classmethod
     def from_complex(cls, value: complex) -> Self:
         return cls(
-            magnitude=abs(value), phase_deg=degrees(atan2(value.real, value.imag))
+            magnitude=abs(value),
+            phase_deg=degrees(atan2(value.real, value.imag)),
         )
 
     @property
@@ -24,7 +25,9 @@ class Phasor:
         return radians(self.phase_deg)
 
     def to_complex(self) -> complex:
-        return self.magnitude * (cos(self.phase_deg) + 1j * sin(self.phase_deg))
+        return self.magnitude * (
+            cos(self.phase_deg) + 1j * sin(self.phase_deg)
+        )
 
 
 @dataclass(kw_only=True)
@@ -46,8 +49,8 @@ class Voltage(Symbolic):
 
 @dataclass
 class Current(Symbolic):
-    """A positive value indicates current flowing from the `positive` terminal to the `negative`
-    terminal.
+    """A positive value indicates current flowing from the
+    `positive` terminal to the `negative` terminal.
     """
 
     component: BaseComponent
@@ -61,7 +64,9 @@ class Node:
     name: str
     is_ground: bool = False
     voltage: Voltage = field(init=False)
-    connected_components: list[BaseComponent] = field(init=False)
+    connected_components: list[BaseComponent] = field(
+        init=False
+    )
 
     def __post_init__(self):
         self.voltage = Voltage(node=self)
@@ -80,7 +85,8 @@ class Node:
             return self.voltage.variable
         else:
             return sum(
-                c.current.variable * (1 if c.positive is self else -1)  # type: ignore
+                c.current.variable
+                * (1 if c.positive is self else -1)  # type: ignore
                 for c in self.connected_components
             )
 
@@ -110,14 +116,20 @@ class BaseComponent(abc.ABC):
 
     @property
     def _voltage_difference(self):
-        return self.positive.voltage.variable - self.negative.voltage.variable  # type: ignore
+        return (
+            self.positive.voltage.variable
+            - self.negative.voltage.variable
+        )  # type: ignore
 
     @property
     def _voltage_difference_value(self) -> float | None:
         return (
             None
             if self.positive.voltage.value is None
-            else (self.positive.voltage.value - self.negative.voltage.value)  # type: ignore
+            else (
+                self.positive.voltage.value
+                - self.negative.voltage.value
+            )  # type: ignore
         )
 
 
@@ -126,7 +138,10 @@ class VoltageSource(BaseComponent):
     voltage: Phasor
 
     def _equation(self, frequency_rad_per_s: float):
-        return self._voltage_difference - self.voltage.to_complex()
+        return (
+            self._voltage_difference
+            - self.voltage.to_complex()
+        )
 
 
 @dataclass(repr=False)
@@ -134,7 +149,10 @@ class CurrentSource(BaseComponent):
     current: Phasor  # type: ignore
 
     def _equation(self, frequency_rad_per_s: float):
-        return super().current.variable - self.current.to_complex()  # type: ignore
+        return (
+            super().current.variable
+            - self.current.to_complex()
+        )  # type: ignore
 
 
 @dataclass(repr=False)
@@ -143,7 +161,8 @@ class Resistor(BaseComponent):
 
     def _equation(self, frequency_rad_per_s: float):
         return (
-            self._voltage_difference - self.current.variable * self.resistance_ohm  # type: ignore
+            self._voltage_difference
+            - self.current.variable * self.resistance_ohm  # type: ignore
         )
 
 
@@ -154,7 +173,8 @@ class Inductor(BaseComponent):
     def _equation(self, frequency_rad_per_s: float):
         return (
             self._voltage_difference
-            - self.current.variable * (1j * frequency_rad_per_s * self.inductance_h)  # type: ignore
+            - self.current.variable
+            * (1j * frequency_rad_per_s * self.inductance_h)  # type: ignore
         )
 
 
@@ -165,7 +185,9 @@ class Capacitor(BaseComponent):
     def _equation(self, frequency_rad_per_s: float):
         return (
             self._voltage_difference
-            - self.current.variable * -1j / (frequency_rad_per_s * self.capacitance_f)  # type: ignore
+            - self.current.variable  # type: ignore
+            * -1j
+            / (frequency_rad_per_s * self.capacitance_f)
         )
 
 
@@ -196,9 +218,15 @@ class AcCircuitSolver:
     def solve(self):
         unknowns = [s.variable for s in self._symbolics]
         initial_guess = [0.0 for s in self._symbolics]
-        solution = nsolve(self._equations, unknowns, initial_guess)
-        for unknown, solved_value in zip(self._symbolics, solution):
-            unknown.value = Phasor.from_complex(complex(solved_value))
+        solution = nsolve(
+            self._equations, unknowns, initial_guess
+        )
+        for unknown, solved_value in zip(
+            self._symbolics, solution
+        ):
+            unknown.value = Phasor.from_complex(
+                complex(solved_value)
+            )
 
     @property
     def _equations(self):
@@ -207,7 +235,11 @@ class AcCircuitSolver:
             equations.append(n.equation)
         for c in self.components:
             equations.append(
-                c._equation(frequency_rad_per_s=(2 * pi * self.frequency_hz))
+                c._equation(
+                    frequency_rad_per_s=(
+                        2 * pi * self.frequency_hz
+                    )
+                )
             )
         return equations
 
@@ -220,8 +252,12 @@ def main() -> None:
     solver = AcCircuitSolver(
         frequency_hz=(3 / (2 * pi)),
         components=[
-            vs1 := VoltageSource("Vs1", vs1n, vs1p, voltage=Phasor(magnitude=1)),
-            vs2 := VoltageSource("Vs2", b, a, voltage=Phasor(magnitude=2)),
+            vs1 := VoltageSource(
+                "Vs1", vs1n, vs1p, voltage=Phasor(magnitude=1)
+            ),
+            vs2 := VoltageSource(
+                "Vs2", b, a, voltage=Phasor(magnitude=2)
+            ),
             r1 := Resistor("R1", b, vs1p, resistance_ohm=4),
             r2 := Resistor("R2", vs1n, a, resistance_ohm=5),
             l := Inductor("L", a, vs1p, inductance_h=6),
