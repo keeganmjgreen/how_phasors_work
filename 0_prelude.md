@@ -29,6 +29,12 @@ Seeing the benefits of phasors in practice over differential equations and the L
 :::
 
 :::{card}
+:header: Tutorial: Building an AC Circuit Analyzer
+:link: /building-an-ac-circuit-analyzer
+Developing AC circuit analysis skills by building a software tool to solve any AC circuit.
+:::
+
+:::{card}
 :header: Complex Power and the Power Factor
 :link: /complex-power-and-the-power-factor
 Deriving complex power and the power triangle from time-domain instantaneous power. Power factor and power factor correction.

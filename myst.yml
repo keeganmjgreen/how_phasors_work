@@ -7,6 +7,7 @@ project:
     - file: 1_introduction.ipynb
     - file: 2_what_is_a_phasor.ipynb
     - file: 3_life_with_and_without_phasors.ipynb
+    - file: 4_building_an_ac_circuit_analyzer.ipynb
     - file: 4_complex_power_and_the_power_factor.ipynb
     - file: 5_three_phase_power.ipynb
     - file: 6_grid_modeling.md
@@ -19,6 +20,8 @@ project:
         - file: 2_what_is_a_phasor.ipynb
           level: 0
         - file: 3_life_with_and_without_phasors.ipynb
+          level: 0
+        - file: 4_building_an_ac_circuit_analyzer.ipynb
           level: 0
         - file: 4_complex_power_and_the_power_factor.ipynb
           level: 0

@@ -12,3 +12,6 @@ dependencies = [
     "schemdraw<1",
     "sympy<2",
 ]
+
+[tool.ruff]
+line-length = 63
