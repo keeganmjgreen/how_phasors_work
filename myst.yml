@@ -8,9 +8,9 @@ project:
     - file: 2_what_is_a_phasor.ipynb
     - file: 3_life_with_and_without_phasors.ipynb
     - file: 4_building_an_ac_circuit_analyzer.ipynb
-    - file: 4_complex_power_and_the_power_factor.ipynb
-    - file: 5_three_phase_power.ipynb
-    - file: 6_grid_modeling.md
+    - file: 5_complex_power_and_the_power_factor.ipynb
+    - file: 6_three_phase_power.ipynb
+    - file: 7_grid_modeling.md
   exports:
     - format: pdf
       template: ./ # plain_latex # https://github.com/myst-templates
@@ -23,11 +23,11 @@ project:
           level: 0
         - file: 4_building_an_ac_circuit_analyzer.ipynb
           level: 0
-        - file: 4_complex_power_and_the_power_factor.ipynb
+        - file: 5_complex_power_and_the_power_factor.ipynb
           level: 0
-        - file: 5_three_phase_power.ipynb
+        - file: 6_three_phase_power.ipynb
           level: 0
-        - file: 6_grid_modeling.md
+        - file: 7_grid_modeling.md
           level: 0
   downloads:
     - file: ./how_phasors_work.pdf
