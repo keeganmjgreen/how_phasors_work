@@ -136,9 +136,7 @@ class VoltageSource(_BaseComponent):
     value: Phasor
 
     def equation(self, frequency_rad_per_s: float):
-        return (
-            self.voltage_difference - self.value.to_complex()
-        )
+        return self.voltage_difference - self.value.to_complex()
 
 
 @dataclass(repr=False)
@@ -165,9 +163,7 @@ class Inductor(_BaseComponent):
     inductance_h: float
 
     def equation(self, frequency_rad_per_s: float):
-        reactance = (
-            1j * frequency_rad_per_s * self.inductance_h
-        )
+        reactance = 1j * frequency_rad_per_s * self.inductance_h
         return (
             self.voltage_difference
             - self.current.variable * reactance  # type: ignore

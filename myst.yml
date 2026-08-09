@@ -29,6 +29,9 @@ project:
           level: 0
         - file: 7_grid_modeling.md
           level: 0
+  settings:
+    myst_to_tex:
+      code_style: minted
   downloads:
     - file: ./how_phasors_work.pdf
       title: Download Book as PDF
