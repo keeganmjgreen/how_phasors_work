@@ -293,7 +293,7 @@ As an example of how these bus classifications would apply, consider the electri
 Single-line diagram of another example electrical grid.
 ```
 
-&nbsp;
+<!-- LATEX_ONLY_EMPTY_PARAGRAPH -->
 
 <!-- ### Linearized Power Flow -->
 

@@ -11,13 +11,13 @@ author: Keegan Trujillo-Green, BASc Mechatronic Systems Engineering
 ::::{grid}
 
 :::{card}
-:header: Introduction<br>&nbsp;
+:header: Introduction<br><!-- <!-- <!-- &nbsp; --> --> -->
 :link: /introduction
 Basics of DC versus AC power and resistive versus reactive loads.
 :::
 
 :::{card}
-:header: What is a Phasor?<br>&nbsp;
+:header: What is a Phasor?<br><!-- <!-- <!-- &nbsp; --> --> -->
 :link: /what-is-a-phasor
 Relationship between sinusoids and phasors. Deriving the concept of phasors. Formal phasor transformation and notation.
 :::
@@ -41,13 +41,13 @@ Deriving complex power and the power triangle from time-domain instantaneous pow
 :::
 
 :::{card}
-:header: Three-Phase Power<br>&nbsp;
+:header: Three-Phase Power<br><!-- <!-- <!-- &nbsp; --> --> -->
 :link: /three-phase-power
 Motivation for three-phase power. Wye versus delta configurations. Three-phase power in the grid.
 :::
 
 :::{card}
-:header: Grid Modeling<br>&nbsp;
+:header: Grid Modeling<br><!-- <!-- <!-- &nbsp; --> --> -->
 :link: /grid-modeling
 Bus injection model. Power flow, optimal power flow, economic dispatch, and unit commitment problems.
 :::
