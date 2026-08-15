@@ -155,30 +155,18 @@ $$
 P_i + j Q_i = \sum_{k \in \mathcal{N}} V_{\! i} \, V_k^* \, Y_{ik}^*
 $$
 
-Solver software often expects real-valued equations, so we work towards splitting this equation into a real part and an imaginary part. Furthermore, the bus injection model most commonly uses polar coordinates for voltage and rectangular coordinates for admittance. To satisfy this, we substitute $V = |V| \cos \delta + j \, |V| \sin \delta$ and $Y = G + j B$ in the above equation, giving us the following. We will eventually be able to take the imaginary unit $j$ out of the picture.
+Solver software often expects real-valued equations, so we work towards splitting this equation into a real part and an imaginary part. Furthermore, the bus injection model most commonly uses polar coordinates for voltage and rectangular coordinates for admittance. To satisfy this, we substitute $V = |V| \mathrm{e}^{j \delta_i}$ and $Y = G + j B$ in the above equation, giving us the following. We will eventually be able to take the imaginary unit $j$ out of the picture.
 
 $$
-P_i + j Q_i = \sum_{k \in \mathcal{N}} (|V_{\! i}| \cos \delta_i + j \, |V_{\! i}| \sin \delta_i) (|V_k| \cos \delta_k - j \, |V_k| \sin \delta_k) (G_{ik} - j B_{ik})
-$$
-
-Expanding the above equation yields:
-
-$$
-P_i + j Q_i = \sum_{k \in \mathcal{N}} \left(
 \begin{aligned}
-    & |V_{\! i}| |V_k| \cos \delta_i \cos \delta_k - j \, |V_{\! i}| |V_k| \cos \delta_i \sin \delta_k \\
-    & + j \, |V_{\! i}| |V_k| \sin \delta_i \cos \delta_k + |V_{\! i}| |V_k| \sin \delta_i \sin \delta_k
+P_i + j Q_i
+& = \sum_{k \in \mathcal{N}} |V_{\! i}| \mathrm{e}^{j \delta_i} |V_k| \mathrm{e}^{-j \delta_i} (G_{ik} - j B_{ik}) \\
+& = \sum_{k \in \mathcal{N}} |V_{\! i}| |V_k| \mathrm{e}^{j (\delta_i - \delta_k)} (G_{ik} - j B_{ik}) \\
+& = \sum_{k \in \mathcal{N}} |V_{\! i}| |V_k| (\cos(\delta_i - \delta_k) + j \, \sin(\delta_i - \delta_k)) (G_{ik} - j B_{ik})
 \end{aligned}
-\right) (G_{ik} - j B_{ik})
 $$
 
-Applying the angle-difference identities $\cos \alpha \cos \beta + \sin \alpha \sin \beta = \cos(\alpha - \beta)$ and $\sin \alpha \cos \beta - \cos \alpha \sin \beta = \sin(\alpha - \beta)$ gives us:
-
-$$
-P_i + j Q_i = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| (\cos (\delta_i - \delta_k) + j \sin(\delta_i - \delta_k)) (G_{ik} - j B_{ik})
-$$
-
-Expanding once again yields:
+Expanding yields:
 
 $$
 P_i + j Q_i = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| \left(
@@ -292,8 +280,6 @@ As an example of how these bus classifications would apply, consider the electri
 
 Single-line diagram of another example electrical grid.
 ```
-
-<!-- LATEX_ONLY_EMPTY_PARAGRAPH -->
 
 <!-- ### Linearized Power Flow -->
 
