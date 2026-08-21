@@ -24,7 +24,7 @@ Single-line diagram of an example electrical grid. (The symbol for "Load" should
 Circuit diagram of the example electrical grid in {ref}`fig_7_1`.
 ```
 
-Each branch $ik$ has a known series impedance $z_{ik}$ and shunt impedance $z_{ik}^\mathrm{Sh}$ according to the $\Pi$ (Pi) branch model. In grid modeling, these parameters are often expressed as *admittance*: series admittance $y_{ik} = 1 / z_{ik}$ and shunt admittance $y_{ik}^\text{Sh} = 1 / z_{ik}^\text{Sh}$. The $\Pi$ branch model applies the shunt admittance in equal parts on the left and right sides, as shown in {ref}`fig_7_3`. This results in a single/per-phase circuit diagram that looks like the Greek letter $\Pi$, hence the name.
+Each branch $ik$ has a known series impedance $z_{ik}$ and shunt impedance $z_{ik}^\text{Sh}$ according to the $\Pi$ (Pi) branch model. In grid modeling, these parameters are often expressed as *admittance*: series admittance $y_{ik} = 1 / z_{ik}$ and shunt admittance $y_{ik}^\text{Sh} = 1 / z_{ik}^\text{Sh}$. The $\Pi$ branch model applies the shunt admittance in equal parts on the left and right sides, as shown in {ref}`fig_7_3`. This results in a single/per-phase circuit diagram that looks like the Greek letter $\Pi$, hence the name.
 
 ```{figure} img/fig_7_3.png
 :width: 64%
@@ -58,7 +58,7 @@ For generality, we will model all branches as transformer branches. For line bra
 
 $$
 \begin{aligned}
-& - \!\! I_{ik}' + V_{\! i}' \, \frac{y_{ik}^\text{Sh}}{2} + (V_{\! i}' - V_k) \, y_{ik} = 0 \\
+& - \! I_{ik}' + V_{\! i}' \, \frac{y_{ik}^\text{Sh}}{2} + (V_{\! i}' - V_k) \, y_{ik} = 0 \\
 & \implies I_{ik}' = V_{\! i}' \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
 & \implies I_{ik} a_{ik}^* = V_{\! i} \, \frac{1}{a_{ik}} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, y_{ik} \\
 & \implies I_{ik} = V_{\! i} \, \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik}
@@ -69,7 +69,7 @@ And to determine $I_{ki}$, we apply KCL by summing the currents out of node $k'$
 
 $$
 \begin{aligned}
-& - \!\! I_{ki} + (V_k - V_{\! i}') \, y_{ik} + V_k \frac{y_{ik}^\text{Sh}}{2} = 0 \\
+& - \! I_{ki} + (V_k - V_{\! i}') \, y_{ik} + V_k \frac{y_{ik}^\text{Sh}}{2} = 0 \\
 & \implies I_{ki} = V_k \left( y_{ik} + \frac{y_{ik}^\text{Sh}}{2} \right) - V_{\! i}' \, y_{ik} \\
 & \implies I_{ki} = V_k \left( y_{ik} + \frac{y_{ik}^\text{Sh}}{2} \right) - V_{\! i} \, \frac{1}{a_{ik}} y_{ik}
 \end{aligned}
@@ -84,7 +84,7 @@ $$
 (S_i / V_{\! i})^*
 & = \text{total current out of bus $i$ via $i$-forward branches} \\
 & \, + \text{total current out of bus $i$ via $i$-reverse branches} \\
-& = \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! I_{ik} + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! I_{ik}
+& = \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! I_{ik} \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! I_{ik}
 \end{aligned}
 $$
 
@@ -93,8 +93,8 @@ The subscript "$k \! : \! (i, k) \! \in \! \mathcal{L}$" means "for each bus $k$
 $$
 \begin{aligned}
     (S_i / V_{\! i})^*
-    & = \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\! \left( V_{\! i} \, \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik} \right) \\
-    & + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \left( V_{\! i} \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) - V_k \, \frac{1}{a_{ki}} y_{ki} \right)
+    & = \!\! \sum_{k : (i, k) \in \mathcal{L}} \! \left( V_{\! i} \, \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) - V_k \, \frac{1}{a_{ik}^*} y_{ik} \right) \\
+    & \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \! \left( V_{\! i} \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) - V_k \, \frac{1}{a_{ki}} y_{ki} \right)
 \end{aligned}
 $$
 
@@ -107,15 +107,15 @@ Now we split up the summations such that $V_{\! i}$ can be factored out where po
 $$
 \begin{aligned}
     (S_i / V_{\! i})^*
-    & = V_{\! i} \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
-    & - \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k \, \frac{1}{a_{ki}} y_{ki}
+    & = V_{\! i} \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & \, - \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} \, - \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k \, \frac{1}{a_{ki}} y_{ki}
 \end{aligned}
 $$ (eq_sums_split_vi_extracted)
 
 The bus injection model is typically expressed in a way that allows some complexity to be moved into a new $N \! \times \! N$ matrix $Y \!$, called the *admittance matrix*, which allows the above equation to be rewritten succinctly as:
 
 $$
-(S_i / V_{\! i})^* = \sum_{k \in \mathcal{N}} V_k \, Y_{ik}
+(S_i / V_{\! i})^* = \sum_{k \in \mathcal{N}} V_k \, Y_{\! ik}
 $$ (eq_7_6)
 
 Or, even more simply, as a matrix equation:
@@ -127,11 +127,11 @@ $$
 where "$\displaystyle\circ$" indicates element-wise vector multiplication and $Y$ is defined as having the following diagonal and off-diagonal elements:
 
 $$
-Y_{ii} = \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right)
+Y_{ii} = \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right)
 $$
 
 $$
-Y_{ik} =
+Y_{\! ik} =
 \begin{cases}
 - y_{ik} / a_{ik}^* & \text{if branch $ik$ is an $i$-forward branch} \\
 - y_{ki} / a_{ki} & \text{if branch $ik$ is an $i$-reverse branch} \\
@@ -140,10 +140,10 @@ Y_{ik} =
 $$
 
 ```{note}
-Although $y_{ik}$ is the same as $y_{ki}$, $Y_{ik}$ is not necessarily equal to $Y_{ki}$.
+Although $y_{ik}$ is the same as $y_{ki}$, $Y_{\! ik}$ is not necessarily equal to $Y_{ki}$.
 ```
 
-Thus, the admittance matrix does not only specify the admittance values between buses in its off-diagonal elements. Its off-diagonal elements additionally specify whether a branch is present between any $ik$-pair of buses ($Y_{ik} \neq 0$), whether a branch is a transformer ($a_{ik} \neq 1$), and its voltage ratio if it is a transformer ($T_{ik} \neq 1$), and even its phase shift if it is also a phase-shifting transformer ($\varphi_{ik} \neq 0$). Furthermore, the diagonal elements specify, for each bus, the shunt admittances of neighboring branches.
+Thus, the admittance matrix does not only specify the admittance values between buses in its off-diagonal elements. Its off-diagonal elements additionally specify whether a branch is present between any $ik$-pair of buses ($Y_{\! ik} \neq 0$), whether a branch is a transformer ($a_{ik} \neq 1$), and its voltage ratio if it is a transformer ($T_{ik} \neq 1$), and even its phase shift if it is also a phase-shifting transformer ($\varphi_{ik} \neq 0$). Furthermore, the diagonal elements specify, for each bus, the shunt admittances of neighboring branches.
 
 Just as how a branch admittance $y$ can be split into real and imaginary parts $g + j b$, where $g$ is conductance[^2] and $b$ is susceptance, the admittance matrix $Y \!$ can be split into $G + j B$, which we will leverage shortly.
 
@@ -152,7 +152,7 @@ Just as how a branch admittance $y$ can be split into real and imaginary parts $
 The bus injection equations are typically arranged as equations for active and reactive power $P + j Q = S$. To describe the power at a given bus $i$, we take the conjugate of Equation {eq}`eq_7_6` and multiply both sides by $V_{\! i}$:
 
 $$
-P_i + j Q_i = \sum_{k \in \mathcal{N}} V_{\! i} \, V_k^* \, Y_{ik}^*
+P_i + j Q_i = \sum_{k \in \mathcal{N}} V_{\! i} \, V_k^* \, Y_{\! ik}^*
 $$
 
 Solver software often expects real-valued equations, so we work towards splitting this equation into a real part and an imaginary part. Furthermore, the bus injection model most commonly uses polar coordinates for voltage and rectangular coordinates for admittance. To satisfy this, we substitute $V = |V| \mathrm{e}^{j \delta_i}$ and $Y = G + j B$ in the above equation, giving us the following. We will eventually be able to take the imaginary unit $j$ out of the picture.
@@ -214,8 +214,8 @@ To express the power flow equations in the per-unit system, we select the nomina
 $$
 \begin{aligned}
     & \left( \frac{S_i^\text{pu} S^\text{base}}{V_{\! i}^\text{pu} V_{\! i}^\text{base}} \right)^{\! *} \\
-    & = V_{\! i}^\text{pu} V_{\! i}^\text{base} \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu} a_{ik}^\text{base}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
-    & - \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{(a_{ik}^\text{pu} a_{ik}^\text{base})^*} \, y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{a_{ki}^\text{pu} a_{ki}^\text{base}} \, y_{ki}
+    & = V_{\! i}^\text{pu} V_{\! i}^\text{base} \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu} a_{ik}^\text{base}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & \, - \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{(a_{ik}^\text{pu} a_{ik}^\text{base})^*} \, y_{ik} \, - \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k^\text{pu} V_k^\text{base} \frac{1}{a_{ki}^\text{pu} a_{ki}^\text{base}} \, y_{ki}
 \end{aligned}
 $$
 
@@ -224,8 +224,8 @@ Substituting $a_{ik}^\text{base} = V_{\! i}^\text{base} / V_k^\text{base}$, mult
 $$
 \begin{aligned}
     & \left( \frac{S_i^\text{pu}}{V_{\! i}^\text{pu}} \right)^{\! *} \\
-    & = V_{\! i}^\text{pu} \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \frac{(V_k^\text{base})^2}{S^\text{base}} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \frac{(V_{\! i}^\text{base})^2}{S^\text{base}} \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
-    & - \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik} - \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}
+    & = V_{\! i}^\text{pu} \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \frac{(V_k^\text{base})^2}{S^\text{base}} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\! \frac{(V_{\! i}^\text{base})^2}{S^\text{base}} \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
+    & \, - \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik} \, - \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{(V_k^\text{base})^2}{S^\text{base}} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}
 \end{aligned}
 $$
 
@@ -234,8 +234,8 @@ We now apply the per-unit system to the admittances, defining $y_{ik} = y_{ik}^\
 $$
 \begin{aligned}
     \left( \frac{S_i^\text{pu}}{V_{\! i}^\text{pu}} \right)^{\! *}
-    & = V_{\! i}^\text{pu} \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \, \Biggl( \frac{y_{ik}^\text{Sh,pu}}{2} + y_{ik}^\text{pu} \Biggr) + \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \! \Biggl( \frac{y_{ki}^\text{Sh,pu}}{2} + y_{ki}^\text{pu} \Biggr) \Biggr) \\
-    & - \!\!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik}^\text{pu} - \!\!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}^\text{pu}
+    & = V_{\! i}^\text{pu} \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}^\text{pu}|^2} \, \Biggl( \frac{y_{ik}^\text{Sh,pu}}{2} + y_{ik}^\text{pu} \Biggr) \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \Biggl( \frac{y_{ki}^\text{Sh,pu}}{2} + y_{ki}^\text{pu} \Biggr) \Biggr) \\
+    & \, - \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{1}{(a_{ik}^\text{pu})^*} \, y_{ik}^\text{pu} \, - \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k^\text{pu} \frac{1}{a_{ki}^\text{pu}} \, y_{ki}^\text{pu}
 \end{aligned}
 $$
 
