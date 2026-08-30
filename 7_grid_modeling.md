@@ -160,9 +160,9 @@ Solver software often expects real-valued equations, so we work towards splittin
 $$
 \begin{aligned}
 P_i + j Q_i
-& = \sum_{k \in \mathcal{N}} |V_{\! i}| \mathrm{e}^{j \delta_i} |V_k| \mathrm{e}^{-j \delta_i} (G_{ik} - j B_{ik}) \\
+& = \sum_{k \in \mathcal{N}} |V_{\! i}| \mathrm{e}^{j \delta_i} |V_k| \mathrm{e}^{-j \delta_k} (G_{ik} - j B_{ik}) \\
 & = \sum_{k \in \mathcal{N}} |V_{\! i}| |V_k| \mathrm{e}^{j (\delta_i - \delta_k)} (G_{ik} - j B_{ik}) \\
-& = \sum_{k \in \mathcal{N}} |V_{\! i}| |V_k| (\cos(\delta_i - \delta_k) + j \, \sin(\delta_i - \delta_k)) (G_{ik} - j B_{ik})
+& = \sum_{k \in \mathcal{N}} |V_{\! i}| |V_k| \, (\cos(\delta_i - \delta_k) + j \sin(\delta_i - \delta_k)) (G_{ik} - j B_{ik})
 \end{aligned}
 $$
 
@@ -182,8 +182,8 @@ Finally, we are able to split this complex-valued equation into the following re
 $$
 \boxed{
 \begin{aligned}
-    P_i & = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)) \\
-    Q_i & = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k))
+    P_i & = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| \, (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)) \\
+    Q_i & = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| \, (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k))
 \end{aligned}
 }
 $$ (eq_pf)
@@ -333,8 +333,8 @@ $$
     & \\
     & \! \min_{\mathbf{P}} \sum_{g \in \mathcal{G}} C_g \bigl( P_{\! g} \bigr) \\
     & \text{subject to:} \\
-    & P_i = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) && \!\! \forall \, i \in \mathcal{N} \\
-    & Q_i = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)) && \!\! \forall \, i \in \mathcal{N} \\
+    & P_i = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| \, (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) && \!\! \forall \, i \in \mathcal{N} \\
+    & Q_i = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| \, (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)) && \!\! \forall \, i \in \mathcal{N} \\
     & S_g^\text{min} \leq S_g \leq S_g^\text{max} && \!\! \forall \, g \in \mathcal{G} \\
     & |I_{ik}| \leq I_{ik}^\text{max} && \!\! \forall \, (i, k) \in \mathcal{L} \\
     & V_{\! i}^\text{min} \leq |V_{\! i}| \leq V_{\! i}^\text{max} && \!\! \forall \, i \in \mathcal{N} \\
