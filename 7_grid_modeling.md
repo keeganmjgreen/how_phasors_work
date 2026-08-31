@@ -2,7 +2,7 @@
 
 If the example circuits we've seen so far seem complicated to analyze, then this pales in comparison to the complexity of analyzing and operating the electrical grid. The electrical grid may be just another circuit, but it has rapid, far-reaching, and expensive consequences if it fails. If the grid is operated incorrectly, its voltages and frequencies can be put in jeopardy in a matter of seconds or less, creating a risk of cascading failure. Understanding the grid and how it behaves depending on how it's operated is crucial to be able to control it correctly. Grid modeling allows operators to not only stay in control of grid voltages and frequencies, but also to dispatch generators in a way that is cost-optimal.
 
-The grid is modeled as a network of $N$ electrical buses connected by branches. [@PowerSystemModel] A bus is a shared point of connection that has minimal electrical impedance. Generators and loads are attached to the buses. Each pair of buses $(i, k)$[^1] may be connected by a branch&mdash;such as a power line or transformer&mdash;which has nonzero impedance and can result in voltage and phase differences between buses $i$ and $k$. In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid. The sets of buses and branches are denoted $\mathcal{N}$ and $\mathcal{L}$, respectively.
+The grid is modeled as a network of $N$ electrical buses connected by $L$ branches. [@PowerSystemModel] A bus is a shared point of connection that has minimal electrical impedance. Generators and loads are attached to the buses. Each pair of buses $(i, k)$[^1] may be connected by a branch&mdash;such as a power line or transformer&mdash;which has nonzero impedance and can result in voltage and phase differences between buses $i$ and $k$. In the grid, each bus has a specific nominal voltage, typically 4 kV to 765 kV per phase depending on whether it is in the transmission or distribution part of the grid. The sets of buses and branches are denoted $\mathcal{N}$ and $\mathcal{L}$, respectively.
 
 [^1]: Index $k$ is used instead of $j$ to distinguish it from the imaginary unit.
 
@@ -112,7 +112,7 @@ $$
 \end{aligned}
 $$ (eq_sums_split_vi_extracted)
 
-The bus injection model is typically expressed in a way that allows some complexity to be moved into a new $N \! \times \! N$ matrix $Y \!$, called the *admittance matrix*, which allows the above equation to be rewritten succinctly as:
+The bus injection model is typically expressed in a way that allows some complexity to be moved into a new $N \! \times \! N$ matrix $Y \!$, called the *bus admittance matrix*, which allows the above equation to be rewritten succinctly as:
 
 $$
 (S_i / V_{\! i})^* = \sum_{k \in \mathcal{N}} V_k \, Y_{\! ik}
@@ -124,7 +124,7 @@ $$
 S = (Y \!\: V)^* \circ V
 $$
 
-where "$\displaystyle\circ$" indicates element-wise vector multiplication and $Y$ is defined as having the following diagonal and off-diagonal elements:
+where "$\displaystyle\circ$" indicates element-wise vector multiplication and $Y \!$ is defined as having the following diagonal and off-diagonal elements:
 
 $$
 Y_{ii} = \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right)
@@ -187,6 +187,26 @@ $$
 \end{aligned}
 }
 $$ (eq_pf)
+
+For a branch $l$ from bus $i$ to bus $k$, the power flowing into the branch from bus $i$ is:
+
+$$
+\begin{aligned}
+    P_{ik} & = |V_{\! i}| \, |V_k| \, (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)) - |V_{\! i}|^2 G^\text{f}_{l, i} \\ 
+    Q_{ik} & = |V_{\! i}| \, |V_k| \, (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) - |V_{\! i}|^2 B^\text{f}_{l, i}
+\end{aligned}
+$$
+
+And the power flowing into the branch from bus $k$ is:
+
+$$
+\begin{aligned}
+    P_{ki} & = |V_k| \, |V_{\! i}| \, (G_{ki} \cos(\delta_k - \delta_i) + B_{ki} \sin(\delta_k - \delta_i)) - |V_k|^2 G^\text{t}_{l, k} \\ 
+    Q_{ki} & = |V_k| \, |V_{\! i}| \, (G_{ki} \sin(\delta_k - \delta_i) - B_{ki} \cos(\delta_k - \delta_i)) - |V_k|^2 B^\text{t}_{l, k}
+\end{aligned}
+$$
+
+Where $G^\text{f}$, $B^\text{f}$, $G^\text{t}$, and $B^\text{t}$ are the real and imaginary components of the branch-from-bus admittance matrix $Y^\text{f}$ and the branch-to-bus admittance matrix $Y^\text{t} \!$, detailed in this chapter's [appendix](branch_admittance_matrices).
 
 ### Applying the Per-Unit System
 
@@ -415,4 +435,136 @@ We've introduced many concepts; {ref}`fig_7_6` provides a summary of these conce
 :label: fig_7_6
 
 This chapter's concepts and how they inter-relate.
+```
+
+(branch_admittance_matrices)=
+## Appendix: Branch-From-Bus and Branch-To-Bus Admittance Matrices
+
+The bus admittance matrix $Y \!$ is a convenient way to encapsulate the complexity of series admittances ($y$), shunt admittances ($y^\text{Sh}$), and transformer ratios ($a$). However, because each diagonal element $Y_{ii}$ is a sum over every $i$-connected branch, the bus admittance matrix does not allow us to calculate individual branch current and power values ($I_{ik}$ and $S_{ik}$). This can be overcome using the bus admittance matrix with a "branch-from-bus" admittance matrix $Y^\text{f}$ and a "branch-to-bus" admittance matrix $Y^\text{t} \!$. Both of these matrices are sparse matrices of dimension $N \! \times \! L$, where $N$ is the number of buses and $L$ is the number of branches; both matrices have a row for each branch and a column for each bus. For a branch $l$ from bus $i$ to bus $k$, row $l$ of each matrix has nonzero entries only in columns $i$ and $k$:
+
+$$
+\begin{aligned}
+Y^\text{f}_{l, i} & = \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) \qquad
+& Y^\text{f}_{l, k} & = - \frac{y_{ik}}{a_{ik}^*} \\ % \qquad
+% & Y^\text{f}_{l, m} & = 0 \ \forall \ m \neq i, m \neq k \\
+Y^\text{t}_{l, i} & = - \frac{y_{ik}}{a_{ik}} \qquad
+& Y^\text{t}_{l, k} & = \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \\ % \qquad
+% & Y^\text{t}_{l, m} & = 0 \ \forall \ m \neq i, m \neq k
+\end{aligned}
+$$
+
+The familiar bus admittance matrix can be reconstructed from these as follows, using branch-from-bus and branch-to-bus *incidence* matrices $C^{\, \text{f}}$ and $C^{\, \text{t}}$:
+
+$$
+Y = (C^{\, \text{f} \,})^{\! \top} Y^\text{f} + (C^{\, \text{t}})^{\! \top} Y^\text{t}
+$$
+
+Matrices $C^{\, \text{f}}$ and $C^{\, \text{t}}$ are also $N \! \times \! L$ sparse matrices, consisting mostly of zeroes. $C^{\, \text{f}}$ contains a "$1$" entry indicating the bus that each branch originates from. Similarly, $C^{\, \text{t}}$ indicates which bus each branch goes to.
+
+<!-- $$
+C^{\, \text{f} \,}_{l, i} = 1 \qquad
+C^{\, \text{f} \,}_{l, m} = 0 \ \forall \ m \neq i \\
+C^{\, \text{t}}_{l, k} = 1 \qquad
+C^{\, \text{t}}_{l, m} = 0 \ \forall \ m \neq k
+$$ -->
+
+```{note} Example
+
+This is more intuitively understood using an example. Consider a $3$-bus, $2$-branch network.
+
+Branches $l = 1$ originates from bus $i = 1$ and branch $l = 2$  originates from bus $i = 2$:
+
+$$
+Y^\text{f} = \left[
+\begin{matrix}
+\frac{1}{\, |a_{12}|^2} \left( \frac{y_{12}^\text{Sh}}{2} + y_{12} \right) & - \frac{y_{12}}{a_{12}^*} & 0 \\
+0 & \frac{1}{\, |a_{23}|^2} \left( \frac{y_{23}^\text{Sh}}{2} + y_{23} \right) & - \frac{y_{23}}{a_{23}^*}
+\end{matrix}
+\right]
+$$
+
+$$
+C^{\, \text{f} \,} = \left[
+\begin{matrix}
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{matrix}
+\right]
+$$
+
+Branches $l = 1$ goes to bus $k = 2$ and branch $l = 2$ goes to bus $k = 3$:
+
+$$
+Y^\text{t} = \left[
+\begin{matrix}
+- \frac{y_{12}}{a_{12}} & \left( \frac{y_{12}^\text{Sh}}{2} + y_{12} \right) & 0 \\
+0 & - \frac{y_{23}}{a_{23}} & \left( \frac{y_{23}^\text{Sh}}{2} + y_{23} \right)
+\end{matrix}
+\right]
+$$
+
+$$
+C^{\, \text{f} \,} = \left[
+\begin{matrix}
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{matrix}
+\right]
+$$
+
+The bus admittance matrix can be reconstructed as follows:
+
+$$
+(C^{\, \text{f} \,})^{\! \top} = \left[
+\begin{matrix}
+1 & 0 \\
+0 & 1 \\
+0 & 0
+\end{matrix}
+\right]
+$$
+
+$$
+(C^{\, \text{f} \,})^{\! \top} Y^\text{f} = \left[
+\begin{matrix}
+\frac{1}{\, |a_{12}|^2} \left( \frac{y_{12}^\text{Sh}}{2} + y_{12} \right) & - \frac{y_{12}}{a_{12}^*} & 0 \\
+0 & \frac{1}{\, |a_{23}|^2} \left( \frac{y_{23}^\text{Sh}}{2} + y_{23} \right) & - \frac{y_{23}}{a_{23}^*} \\
+0 & 0 & 0
+\end{matrix}
+\right]
+$$
+
+$$
+(C^{\, \text{f} \,})^{\! \top} = \left[
+\begin{matrix}
+0 & 0 \\
+1 & 0 \\
+0 & 1
+\end{matrix}
+\right]
+$$
+
+$$
+(C^{\, \text{f} \,})^{\! \top} Y^\text{f} = \left[
+\begin{matrix}
+0 & 0 & 0 \\
+- \frac{y_{12}}{a_{12}} & \left( \frac{y_{12}^\text{Sh}}{2} + y_{12} \right) & 0 \\
+0 & - \frac{y_{23}}{a_{23}} & \left( \frac{y_{23}^\text{Sh}}{2} + y_{23} \right)
+\end{matrix}
+\right]
+$$
+
+$$
+\begin{aligned}
+Y
+& = (C^{\, \text{f} \,})^{\! \top} Y^\text{f} + (C^{\, \text{t}})^{\! \top} Y^\text{t} \\
+& = \left[
+\begin{matrix}
+\frac{1}{\, |a_{12}|^2} \left( \frac{y_{12}^\text{Sh}}{2} + y_{12} \right) & - \frac{y_{12}}{a_{12}^*} & 0 \\
+- \frac{y_{12}}{a_{12}} & \frac{1}{\, |a_{23}|^2} \left( \frac{y_{23}^\text{Sh}}{2} + y_{23} \right) + \left( \frac{y_{12}^\text{Sh}}{2} + y_{12} \right) & - \frac{y_{23}}{a_{23}^*} \\
+0 & - \frac{y_{23}}{a_{23}} & \left( \frac{y_{23}^\text{Sh}}{2} + y_{23} \right)
+\end{matrix}
+\right]
+\end{aligned}
+$$
 ```
