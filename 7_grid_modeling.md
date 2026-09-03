@@ -47,7 +47,7 @@ Per-phase transformer model (the $\Pi$ branch model + ideal transformer).
 At any given time, a grid operator must dispatch generators to serve the loads in its grid. Each load $l$ consists of a given active power $P_l$ and reactive power $Q_l$. A dispatch specifies the active power $P_{\! g}$ at which to operate each generator $g$. Once a grid operator has decided the generator setpoints, they must be able to validate those setpoints subject to how power will flow through the grid. The grid operator must do this at regular operating intervals (typically 5-minute or 1-hour intervals) because the predicted load and available generation change over time. This consists of:
 
 1. Validating that power generation will satisfy the loads.
-2. Validating that not too much current is flowing through a given line or transformer. This is to avoid overloading/overheating it.
+2. Validating that not too much power is flowing through a given line or transformer. This is to avoid overloading/overheating it.
 3. Validating that voltages are within acceptable margins. This is for the sake of the loads.
 
 The task of determining how power will flow through the grid and whether it will satisfy the loads is known as the power flow (PF) problem [@monesGentleIntroductionPower2020;@PowerFlowDocumentation].
@@ -312,19 +312,19 @@ After solving the power flow problem, a grid operator is able to validate their 
 1. Validating that power generation will satisfy the loads. More specifically, validating that the slack generation&mdash;which is free to vary to whatever value is required to satisfy the loads&mdash;is within the maximum power of slack generator $g$:
 
     $$
-    S_g \leq S_g^\text{max}
+    S_g \leq S_g^\text{max} \ \forall \ g \in \mathcal{G}
     $$ (pf_criterion_1)
 
-2. Validating that not too much current is flowing through a given line or transformer:
+2. Validating that not too much power is flowing into or out of a branch (a line or transformer):
 
     $$
-    |I_{ik}| \leq I_{ik}^\text{max}
+    |S_{ik}| \leq S_l^\text{max} \!, \, |S_{ki}| \leq S_l^\text{max} \ \forall \ (i, k) \in \mathcal{L}
     $$ (pf_criterion_2)
 
 3. Validating that voltages are within acceptable margins:
 
     $$
-    V_{\! i}^\text{min} \leq |V_{\! i}| \leq V_{\! i}^\text{max}
+    V_{\! i}^\text{min} \leq |V_{\! i}| \leq V_{\! i}^\text{max} \ \forall \ i \in \mathcal{N}
     $$ (pf_criterion_3)
 
 ## The Economic Dispatch (ED) Problem
@@ -356,7 +356,7 @@ $$
     & P_i = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| \, (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) && \!\! \forall \, i \in \mathcal{N} \\
     & Q_i = |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| \, (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)) && \!\! \forall \, i \in \mathcal{N} \\
     & S_g^\text{min} \leq S_g \leq S_g^\text{max} && \!\! \forall \, g \in \mathcal{G} \\
-    & |I_{ik}| \leq I_{ik}^\text{max} && \!\! \forall \, (i, k) \in \mathcal{L} \\
+    & |S_{ik}| \leq S_l^\text{max} \!, \, |S_{ki}| \leq S_l^\text{max} && \!\! \forall \, (i, k) \in \mathcal{L} \\
     & V_{\! i}^\text{min} \leq |V_{\! i}| \leq V_{\! i}^\text{max} && \!\! \forall \, i \in \mathcal{N} \\
     & \phantom{}
 \end{aligned}
