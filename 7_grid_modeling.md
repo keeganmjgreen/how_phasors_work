@@ -206,11 +206,11 @@ $$
 \end{aligned}
 $$
 
-Where $G^\text{f}$, $B^\text{f}$, $G^\text{t}$, and $B^\text{t}$ are the real and imaginary components of the branch-from-bus admittance matrix $Y^\text{f}$ and the branch-to-bus admittance matrix $Y^\text{t} \!$, detailed in this chapter's [appendix](branch_admittance_matrices).
+Where $G^\text{f} \!$, $B^\text{f} \!$, $G^\text{t} \!$, and $B^\text{t}$ are the real and imaginary components of the branch-from-bus admittance matrix $Y^\text{f}$ and the branch-to-bus admittance matrix $Y^\text{t} \!$, detailed in this chapter's [appendix](branch_admittance_matrices).
 
 ### Applying the Per-Unit System
 
-The per-unit system is the practice in electrical engineering of normalizing quantities like voltage and power to a dimensionless value between 0 and 1. Each quantity $x$ is expressed as a fraction, denoted $x^\text{pu}$, of some base quantity, $x^\text{base}$, such that $x = x^\text{pu} x^\text{base}$. This can be done with many electrical engineering quantities:
+The per-unit system is the practice in electrical engineering of normalizing quantities like voltage and power to a dimensionless value between 0 and 1. Each quantity $x$ is expressed as a fraction, denoted $x^\text{pu} \!$, of some base quantity, $x^\text{base} \!$, such that $x = x^\text{pu} x^\text{base} \!$. This can be done with many electrical engineering quantities:
 
 $$
 \begin{gathered}
@@ -222,7 +222,7 @@ Z = Z^\text{pu} Z^\text{base} \qquad
 \end{gathered}
 $$
 
-For example, in the per-unit system with a base of $S^\text{base} = 100 \ \mathrm{MV\!A}$, a quantity of $S = 90 \ \mathrm{MV\!A}$ would become $S^\text{pu} = 0.9 \ \mathrm{per \ unit}$ or $0.9 \ \mathrm{pu}$.
+For example, in the per-unit system with a base of $S^\text{base} = 100 \ \mathrm{MV\!A}$, a quantity of $S = 90 \ \mathrm{MV\!A}$ would become $S^\text{pu} = 0.9 \ \mathrm{per \ unit}$ or $0.9 \ \mathrm{pu} \!$.
 
 The per-unit system makes it easier to interpret quantities relative to the voltage and power ratings of equipment such as buses and generators. And when applied to the power flow problem, the per-unit system offers additional advantages [@PerUnitSystemJuliaGrid]:
 
@@ -239,7 +239,7 @@ $$
 \end{aligned}
 $$
 
-Substituting $a_{ik}^\text{base} = V_{\! i}^\text{base} / V_k^\text{base}$, multiplying both sides by $V_{\! i}^\text{base} / S^\text{base}$ and simplifying:
+Substituting $a_{ik}^\text{base} = V_{\! i}^\text{base} / V_k^\text{base} \!$, multiplying both sides by $V_{\! i}^\text{base} / S^\text{base}$ and simplifying:
 
 $$
 \begin{aligned}
@@ -249,7 +249,7 @@ $$
 \end{aligned}
 $$
 
-We now apply the per-unit system to the admittances, defining $y_{ik} = y_{ik}^\text{pu} y_{ik}^\text{base}$. If we select $S^\text{base} / (V_k^\text{base})^2$ as the base admittance $y_{ik}^\text{base}$, all base terms conveniently cancel out, leaving something that looks exactly like Equation {eq}`eq_sums_split_vi_extracted`, but with "pu" scripts:
+We now apply the per-unit system to the admittances, defining $y_{ik} = y_{ik}^\text{pu} y_{ik}^\text{base} \!$. If we select $S^\text{base} / (V_k^\text{base})^2$ as the base admittance $y_{ik}^\text{base} \!$, all base terms conveniently cancel out, leaving something that looks exactly like Equation {eq}`eq_sums_split_vi_extracted`, but with "pu" scripts:
 
 $$
 \begin{aligned}
@@ -259,7 +259,7 @@ $$
 \end{aligned}
 $$
 
-When the voltage ratio of a transformer $ik$ is *nominal*&mdash;that is, equal to the ratio between the nominal voltage at bus $i$ and the nominal voltage at bus $k$, then $a_{ik}^\text{pu} = 1$ and the equation's terms concerning the transformer branch simplify to those of a line branch. This is because the differing bus voltages $V_{\! i}^\text{base} \neq V_k^\text{base}$ are now accounted for as part of $y_{ki}^\text{base} \neq y_{ik}^\text{base}$, respectively. The power flow problem is typically expressed in the per-unit system because of this advantage, as well as the advantage of improved numerical stability.
+When the voltage ratio of a transformer $ik$ is *nominal*&mdash;that is, equal to the ratio between the nominal voltage at bus $i$ and the nominal voltage at bus $k$, then $a_{ik}^\text{pu} = 1$ and the equation's terms concerning the transformer branch simplify to those of a line branch. This is because the differing bus voltages $V_{\! i}^\text{base} \neq V_k^\text{base}$ are now accounted for as part of $y_{ki}^\text{base} \neq y_{ik}^\text{base} \!$, respectively. The power flow problem is typically expressed in the per-unit system because of this advantage, as well as the advantage of improved numerical stability.
 
 ### Bus Classifications
 
