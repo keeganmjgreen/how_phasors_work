@@ -155,7 +155,7 @@ $$
 P_i + j Q_i = \sum_{k \in \mathcal{N}} V_{\! i} \, V_k^* \, Y_{\! ik}^*
 $$
 
-Solver software often expects real-valued equations, so we work towards splitting this equation into a real part and an imaginary part. Furthermore, the bus injection model most commonly uses polar coordinates for voltage and rectangular coordinates for admittance. To satisfy this, we substitute $V = |V| \mathrm{e}^{j \delta_i}$ and $Y = G + j B$ in the above equation, giving us the following. We will eventually be able to take the imaginary unit $j$ out of the picture.
+Solver software often expects real-valued equations, so we work towards splitting this equation into a real part and an imaginary part. Furthermore, the bus injection model most commonly uses polar coordinates for voltage and rectangular coordinates for admittance. To satisfy this, we substitute $V = |V| \mathrm{e}^{j \delta}$ and $Y = G + j B$ in the above equation, giving us the following. We will eventually be able to take the imaginary unit $j$ out of the picture.
 
 $$
 \begin{aligned}
