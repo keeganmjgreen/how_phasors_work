@@ -155,14 +155,14 @@ $$
 P_i + j Q_i = \sum_{k \in \mathcal{N}} V_{\! i} \, V_k^* \, Y_{\! ik}^*
 $$
 
-Solver software often expects real-valued equations, so we work towards splitting this equation into a real part and an imaginary part. Furthermore, the bus injection model most commonly uses polar coordinates for voltage and rectangular coordinates for admittance. To satisfy this, we substitute $V = |V| \mathrm{e}^{j \delta}$ and $Y = G + j B$ in the above equation, giving us the following. We will eventually be able to take the imaginary unit $j$ out of the picture.
+Solver software often expects real-valued equations, so we work towards splitting this equation into a real part and an imaginary part. Furthermore, the bus injection model most commonly uses polar coordinates for voltage and rectangular coordinates for admittance. To satisfy this, we substitute $V = |V| \mathrm{e}^{j \delta} = |V| \angle \delta$ and $Y = G + j B$ in the above equation, giving us the following. We will eventually be able to take the imaginary unit $j$ out of the picture.
 
 $$
 \begin{aligned}
 P_i + j Q_i
-& = \sum_{k \in \mathcal{N}} |V_{\! i}| \mathrm{e}^{j \delta_i} |V_k| \mathrm{e}^{-j \delta_k} (G_{ik} - j B_{ik}) \\
-& = \sum_{k \in \mathcal{N}} |V_{\! i}| |V_k| \mathrm{e}^{j (\delta_i - \delta_k)} (G_{ik} - j B_{ik}) \\
-& = \sum_{k \in \mathcal{N}} |V_{\! i}| |V_k| \, (\cos(\delta_i - \delta_k) + j \sin(\delta_i - \delta_k)) (G_{ik} - j B_{ik})
+& = \sum_{k \in \mathcal{N}} \, (|V_{\! i}| \angle \delta_i) \, (|V_k| \angle \! - \! \delta_k) \, (G_{ik} - j B_{ik}) \\
+& = \sum_{k \in \mathcal{N}} \, [|V_{\! i}| \, |V_k| \, \angle \, (\delta_i - \delta_k)] \, (G_{ik} - j B_{ik}) \\
+& = \sum_{k \in \mathcal{N}} |V_{\! i}| \, |V_k| \, (\cos(\delta_i - \delta_k) + j \sin(\delta_i - \delta_k)) \, (G_{ik} - j B_{ik})
 \end{aligned}
 $$
 
