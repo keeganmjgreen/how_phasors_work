@@ -192,8 +192,8 @@ For a branch $l$ from bus $i$ to bus $k$, the power flowing into the branch from
 
 $$
 \begin{aligned}
-    P_{ik} & = |V_{\! i}| \, |V_k| \, (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)) - |V_{\! i}|^2 G^\text{f}_{l, i} \\ 
-    Q_{ik} & = |V_{\! i}| \, |V_k| \, (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) - |V_{\! i}|^2 B^\text{f}_{l, i}
+    P_{ik} & = |V_{\! i}| \, |V_k| \, (G_{ik} \cos(\delta_i - \delta_k) + B_{ik} \sin(\delta_i - \delta_k)) + |V_{\! i}|^2 G^\text{f}_{l, i} \\ 
+    Q_{ik} & = |V_{\! i}| \, |V_k| \, (G_{ik} \sin(\delta_i - \delta_k) - B_{ik} \cos(\delta_i - \delta_k)) + |V_{\! i}|^2 B^\text{f}_{l, i}
 \end{aligned}
 $$
 
@@ -201,8 +201,8 @@ And the power flowing into the branch from bus $k$ is:
 
 $$
 \begin{aligned}
-    P_{ki} & = |V_k| \, |V_{\! i}| \, (G_{ki} \cos(\delta_k - \delta_i) + B_{ki} \sin(\delta_k - \delta_i)) - |V_k|^2 G^\text{t}_{l, k} \\ 
-    Q_{ki} & = |V_k| \, |V_{\! i}| \, (G_{ki} \sin(\delta_k - \delta_i) - B_{ki} \cos(\delta_k - \delta_i)) - |V_k|^2 B^\text{t}_{l, k}
+    P_{ki} & = |V_k| \, |V_{\! i}| \, (G_{ki} \cos(\delta_k - \delta_i) + B_{ki} \sin(\delta_k - \delta_i)) + |V_k|^2 G^\text{t}_{l, k} \\ 
+    Q_{ki} & = |V_k| \, |V_{\! i}| \, (G_{ki} \sin(\delta_k - \delta_i) - B_{ki} \cos(\delta_k - \delta_i)) + |V_k|^2 B^\text{t}_{l, k}
 \end{aligned}
 $$
 
