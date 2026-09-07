@@ -91,6 +91,7 @@
         "yticks"
     ],
     "editor.rulers": [],
+    "editor.stickyScroll.enabled": false,
     "emeraldwalk.runonsave": {
         "commands": [
             {
@@ -103,9 +104,8 @@
         "**/__pycache__": true
     },
     "python.analysis.autoImportCompletions": true,
+    "python.analysis.diagnosticMode": "workspace",
     "python.analysis.typeCheckingMode": "standard",
     "python.defaultInterpreterPath": "~/venvs/how_phasors_work/bin/python",
-    "python.terminal.activateEnvironment": true,
-    "breadcrumbs.enabled": false,
-    "editor.stickyScroll.enabled": false
+    "python.terminal.activateEnvironment": true
 }
