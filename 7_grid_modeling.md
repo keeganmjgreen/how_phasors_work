@@ -321,11 +321,44 @@ After solving the power flow problem, a grid operator is able to validate their 
     |S_{ik}| \leq S_l^\text{max} \!, \, |S_{ki}| \leq S_l^\text{max} \ \forall \ (i, k) \in \mathcal{L}
     $$ (pf_criterion_2)
 
+    We refer to this as the *branch flow constraint*.
+
 3. Validating that voltages are within acceptable margins:
 
     $$
     V_{\! i}^\text{min} \leq |V_{\! i}| \leq V_{\! i}^\text{max} \ \forall \ i \in \mathcal{N}
     $$ (pf_criterion_3)
+
+The branch flow constraint's $|S_{ik}|$ is derived as follows:
+
+$$
+(S_{ik} / V_{\! i})^* = V_{\! i} Y^\text{f}_{l,i} - V_k Y^\text{f}_{l,k}
+$$
+
+$$
+S_{ik} = V_{\! i} \, (V_i Y^\text{f}_{l,i} - V_k Y^\text{f}_{l,k})^*
+$$
+
+$$
+\begin{aligned}
+& |S_{ik}| \\
+& = |V_i| \, |V_i Y^\text{f}_{l,i} - V_k Y^\text{f}_{l,k}| \\
+& = |V_i| \left|
+\begin{aligned}
+& \, |V_i| \, |Y^\text{f}_{l,i}| \left( \cos(\delta_i + \arg(Y^\text{f}_{l,i})) + j \sin(\delta_i + \arg(Y^\text{f}_{l,i})) \right) \\
+& - |V_k| \, |Y^\text{f}_{l,k}| \left( \cos(\delta_k + \arg(Y^\text{f}_{l,k})) + j \sin(\delta_i + \arg(Y^\text{f}_{l,k})) \right)
+\end{aligned}
+\, \right| \\
+& = |V_i| \, \sqrt{ \!
+\begin{aligned}
+& \left[ |V_i| \, |Y^\text{f}_{l,i}| \cos(\delta_i + \arg(Y^\text{f}_{l,i})) + |V_k| \, |Y^\text{f}_{l,k}| \cos(\delta_k + \arg(Y^\text{f}_{l,k})) \right]^2 \\
+& + \left[ |V_i| \, |Y^\text{f}_{l,i}| \sin(\delta_i + \arg(Y^\text{f}_{l,i})) + |V_k| \, |Y^\text{f}_{l,k}| \sin(\delta_i + \arg(Y^\text{f}_{l,k})) \right]^2
+\end{aligned}
+} \\ \,
+\end{aligned}
+$$
+
+The same is done for $|S_{ki}|$ by replacing $Y^\text{f}$ with $Y^\text{t}$.
 
 ## The Economic Dispatch (ED) Problem
 
