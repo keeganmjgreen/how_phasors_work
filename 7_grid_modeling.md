@@ -102,7 +102,7 @@ $$
 Branch $ik$ is the same as a branch $ki$, admittance $y_{ik}$ is the same as $y_{ki}$, and transformer ratio $a_{ik}$ is the same as $a_{ki}$; the order of the subscript simply indicates whether the bus $i$ for which the KCL equation is written is considered the start or end of the branch.
 ```
 
-Now we split up the summations such that $V_{\! i}$ can be factored out where possible:
+Splitting up the summations and rearranging:
 
 $$
 \begin{aligned}
@@ -110,7 +110,7 @@ $$
     & = V_{\! i} \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\! \frac{1}{\, |a_{ik}|^2} \left( \frac{y_{ik}^\text{Sh}}{2} + y_{ik} \right) \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \! \left( \frac{y_{ki}^\text{Sh}}{2} + y_{ki} \right) \Biggr) \\
     & \, - \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k \, \frac{1}{a_{ik}^*} y_{ik} \, - \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k \, \frac{1}{a_{ki}} y_{ki}
 \end{aligned}
-$$ (eq_sums_split_vi_extracted)
+$$ (eq_sums_split)
 
 The bus injection model is typically expressed in a way that allows some complexity to be moved into a new $N \! \times \! N$ matrix $Y \!$, called the *bus admittance matrix*, which allows the above equation to be rewritten succinctly as:
 
@@ -229,7 +229,7 @@ The per-unit system makes it easier to interpret quantities relative to the volt
 - It improves the problem's stability when solving using numerical methods.
 - As we will see, it allows most transformer branches to be treated simply as line branches because the transformer voltage ratio becomes $1\!:\!1$ in the per-unit system.
 
-To express the power flow equations in the per-unit system, we select the nominal bus voltage as the base voltage $V_{\! i}^\text{base}$ at each bus $i$, and an arbitrary value $S^\text{base}$ as the base power everywhere. We substitute $S_i^\text{pu} S^\text{base}$ for $S_i$ and $V_{\! i}^\text{pu} V_{\! i}^\text{base}$ for $V_{\! i}$ in Equation {eq}`eq_sums_split_vi_extracted` as follows. We also split the transformer voltage ratio $a_{ik}$ into nominal voltage ratio $V_{\! i}^\text{base} / V_k^\text{base}$ (which we denote $a_{ik}^\text{base}$) times an off-nominal factor (which we denote $a_{ik}^\text{pu}$). It is not typical to represent transformer voltage ratios in the per-unit system as such&mdash;they are dimensionless quantities to begin with&mdash;but we use the notation $a_{ik} = a_{ik}^\text{pu} a_{ik}^\text{base}$ nonetheless for consistency.
+To express the power flow equations in the per-unit system, we select the nominal bus voltage as the base voltage $V_{\! i}^\text{base}$ at each bus $i$, and an arbitrary value $S^\text{base}$ as the base power everywhere. We substitute $S_i^\text{pu} S^\text{base}$ for $S_i$ and $V_{\! i}^\text{pu} V_{\! i}^\text{base}$ for $V_{\! i}$ in Equation {eq}`eq_sums_split` as follows. We also split the transformer voltage ratio $a_{ik}$ into nominal voltage ratio $V_{\! i}^\text{base} / V_k^\text{base}$ (which we denote $a_{ik}^\text{base}$) times an off-nominal factor (which we denote $a_{ik}^\text{pu}$). It is not typical to represent transformer voltage ratios in the per-unit system as such&mdash;they are dimensionless quantities to begin with&mdash;but we use the notation $a_{ik} = a_{ik}^\text{pu} a_{ik}^\text{base}$ nonetheless for consistency.
 
 $$
 \begin{aligned}
@@ -249,7 +249,7 @@ $$
 \end{aligned}
 $$
 
-We now apply the per-unit system to the admittances, defining $y_{ik} = y_{ik}^\text{pu} y_{ik}^\text{base} \!$. If we select $S^\text{base} / (V_k^\text{base})^2$ as the base admittance $y_{ik}^\text{base} \!$, all base terms conveniently cancel out, leaving something that looks exactly like Equation {eq}`eq_sums_split_vi_extracted`, but with "pu" scripts:
+We now apply the per-unit system to the admittances, defining $y_{ik} = y_{ik}^\text{pu} y_{ik}^\text{base} \!$. If we select $S^\text{base} / (V_k^\text{base})^2$ as the base admittance $y_{ik}^\text{base} \!$, all base terms conveniently cancel out, leaving something that looks exactly like Equation {eq}`eq_sums_split`, but with "pu" scripts:
 
 $$
 \begin{aligned}
@@ -457,15 +457,141 @@ $$
 
 <!-- ### The Security-Constrained Optimal Power Flow (SCOPF) Problem -->
 
-<!-- ### Linearized Optimal Power Flow -->
+## Linear Optimal Power Flow
+
+The power flow equations {ref}`eq_pf` contain quadratic terms multiplied with trigonometric functions. Branch flow constraint {eq}`pf_criterion_2` is even more complicated. The power flow equations being nonlinear is easy enough when solving them as a system of equations, and the branch flow constraint being nonlinear is easy enough when evaluating the power flow solution. However, when used as constraints in OPF, the nonlinearity makes the optimization problem significantly more difficult.
+
+Approximations:
+
+1. Series resistance is negligible compared to series reactance: $g_{ik} \approx 0$ and $y_{ik} \approx j b_{ik}$.
+2. Negligible shunt conductance and susceptance: $g_{ik}^\text{Sh} \approx b_{ik}^\text{Sh} \approx 0$.
+3. Nominal turns ratios: $|a_{ik}| = 1$.
+5. Voltage angle differences and transformer phase shifts are small: $\sin(\delta_i - \delta_k - \varphi_{ik}) \approx \delta_i - \delta_k - \varphi_{ik}$ and $\cos(\delta_i - \delta_k) \approx 1$.
+4. Voltage magnitudes are approximately nominal: $|V_{\! i}| \approx |V_k| \approx 1 \ \mathrm{pu}$ everywhere.
+
+To derive the linear form of power flow equations {ref}`eq_pf`, we start over by applying approximations 1&ndash;3 to equation {ref}`eq_sums_split` as follows. We will apply approximations 4 and 5 later.
+
+$$
+\begin{aligned}
+    (S_i / V_{\! i})^*
+    & = V_{\! i} \, \Biggl( \, \sum_{k : (i, k) \in \mathcal{L}} \!\!\! j b_{ik} \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! j b_{ki} \Biggr) \\
+    & \, - \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! V_k \, (j b_{ik} \, \angle \, \varphi_{ik}) \, - \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! V_k \, (j b_{ki} \, \angle \! - \! \varphi_{ki})
+\end{aligned}
+$$ (eq_sums_split_2)
+
+We redefine the bus admittance matrix $Y \!$ as:
+
+$$
+\begin{aligned}
+Y_{\! ii} = j B_{ii} \, \angle \Phi_{ii}
+& = \!\! \sum_{k : (i, k) \in \mathcal{L}} \!\!\! j b_{ik} \, + \!\! \sum_{k : (k, i) \in \mathcal{L}} \!\!\! j b_{ki} \\
+Y_{\! ik} = j B_{ik} \, \angle \Phi_{ik}
+& =
+\begin{cases}
+- j b_{ik} \, \angle \, \varphi_{ik} & \text{if branch $ik$ is an $i$-forward branch} \\
+- j b_{ki} \, \angle \! - \! \varphi_{ki} & \text{if branch $ik$ is an $i$-reverse branch} \\
+\,\,\,\; 0 & \text{if branch $ik$ does not exist (no branch)}
+\end{cases}
+\end{aligned}
+$$
+
+Equation {ref}`eq_sums_split_2` becomes:
+
+$$
+(S_i / V_{\! i})^* = \sum_{k \in \mathcal{N}} V_k \, (j B_{ik} \, \angle \Phi_{ik})
+$$
+
+We take the conjugate and multiply both sides by $V_{\! i}$:
+
+$$
+\begin{aligned}
+S_i
+& = \sum_{k \in \mathcal{N}} V_{\! i} \, V_k^* \, (j B_{ik} \, \angle \! - \! \Phi_{ik}) \\
+& = \sum_{k \in \mathcal{N}} \, [|V_{\! i}| \, |V_k| \, \angle \, (\delta_i - \delta_k)] \, (j B_{ik} \, \angle \! - \! \Phi_{ik}) \\
+& = \sum_{k \in \mathcal{N}} |V_{\! i}| \, |V_k| \, j B_{ik} \, \angle \, (\delta_i - \delta_k - \Phi_{ik}) \\
+& = \sum_{k \in \mathcal{N}} |V_{\! i}| \, |V_k| \, j B_{ik} \, (\cos(\delta_i - \delta_k - \Phi_{ik}) + j \sin(\delta_i - \delta_k - \Phi_{ik}))
+\end{aligned}
+$$
+
+Splitting $S_i$ into active and reactive power gives us:
+
+$$
+\begin{aligned}
+P_i = \!\!\!\! && - & |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| \, B_{ik} \sin(\delta_i - \delta_k - \Phi_{ik}) \\
+Q_i = \!\!\!\! &&& |V_{\! i}| \sum_{k \in \mathcal{N}} |V_k| \, B_{ik} \cos(\delta_i - \delta_k - \Phi_{ik})
+\end{aligned}
+$$
+
+For a branch between buses $i$ and $k$, the power flowing into the branch from bus $i$ is as follows. ($P_{ik}$ assumes $\sin \Phi_{ik} \approx 0$.)
+
+$$
+\begin{aligned}
+    P_{ik} = \!\!\!\! && - & |V_{\! i}| \, |V_k| \, B_{ik} \sin(\delta_i - \delta_k - \Phi_{ik}) \\ 
+    Q_{ik} = \!\!\!\! &&& |V_{\! i}| \, |V_k| \, B_{ik} \cos(\delta_i - \delta_k - \Phi_{ik}) - |V_{\! i}|^2 B_{ik}
+\end{aligned}
+$$
+
+Applying approximation 4 yields:
+
+$$
+\begin{aligned}
+    P_{ik} = \!\!\!\! && - & |V_{\! i}| \, |V_k| \, B_{ik} \!\: (\delta_i - \delta_k - \Phi_{ik}) \\ 
+    Q_{ik} = \!\!\!\! &&& |V_{\! i}| \, |V_k| \, B_{ik} - |V_{\! i}|^2 B_{ik}
+\end{aligned}
+$$
+
+And, finally, applying approximation 5 gives us:
+
+$$
+\begin{aligned}
+    P_{ik} & = B_{ik} \!\: (\delta_i - \delta_k - \Phi_{ik}) \\
+    Q_{ik} & = 0
+\end{aligned}
+$$
+
+Once again, we sum the power flowing out of every bus $i$:
+
+$$
+P_i = \!\!\! \sum_{k \in \mathcal{N} \! , \, k \neq i} \!\!\!\! P_{ik} = - \!\!\! \sum_{k \in \mathcal{N} \! , \, k \neq i} \!\!\!\! B_{ik} (\delta_i - \delta_k - \Phi_{ik})
+$$ (eq_pf_linear)
+
+This is the linear power flow equation, which applies to every bus $i$. The linear power flow equation is much simpler than the original, nonlinear power flow equation due to the approximations applied.
+
+Equation {ref}`eq_pf_linear` is analogous to DC circuit analysis using KCL ($I_i = \Sigma (V_i - V_k) / r_{ik}$) as shown in {ref}`tab_7_2`.
+
+```{table}
+:width: 100%
+:label: tab_7_2
+
+| Linear power flow          | DC circuit analysis                |
+|----------------------------|------------------------------------|
+| Conservation of power flow | Conservation of current flow (KCL) |
+| $P_i$, $P_{ik}$            | $I_i$, $I_{ik}$                    |
+| $\theta_i$, $\theta_k$     | $V_{\! i}$, $V_k$                  |
+| $\Phi_{ik}$                | ${\Delta V}_{\! ik}$               |
+| $-1 / B_{ik}$              | $R_{ik}$                           |
+
+Linear power flow is analogous to DC circuit analysis.
+```
+
+<!-- ```{figure} img/fig_7_6.png
+:width: 64%
+:label: fig_7_6
+
+The branch model (a) used in linear power flow is analogous to DC branch model (b).
+``` -->
+
+<!-- Undoing any assumption -> nonlinearity? -->
+<!-- KCL/KVL -->
+<!-- Control -->
 
 ## Summary
 
-We've introduced many concepts; {ref}`fig_7_6` provides a summary of these concepts and how they relate to each other.
+We've introduced many concepts; {ref}`fig_7_7` provides a summary of these concepts and how they relate to each other.
 
-```{figure} img/fig_7_6.png
+```{figure} img/fig_7_7.png
 :width: 100%
-:label: fig_7_6
+:label: fig_7_7
 
 This chapter's concepts and how they inter-relate.
 ```
