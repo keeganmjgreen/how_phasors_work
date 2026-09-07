@@ -283,7 +283,7 @@ And what if a bus has neither generators nor loads attached? In this case, the b
 :width: 100%
 :label: tab_7_1
 
-| Bus type     | $P_i$             | $Q_i$         | $V_{\! i}$                               | $\delta_i$                   |
+| Bus type     | $P_i$             | $Q_i$         | $V_{\! i}$                          | $\delta_i$                   |
 |--------------|-------------------|---------------|-------------------------------------|------------------------------|
 | Load/PQ      | Fixed by load     | Fixed by load | Free                                | Free                         |
 | Generator/PV | Fixed by dispatch | Free          | Fixed by grid operating requirement | Free                         |
@@ -473,7 +473,7 @@ This chapter's concepts and how they inter-relate.
 (branch_admittance_matrices)=
 ## Appendix: Branch-From-Bus and Branch-To-Bus Admittance Matrices
 
-The bus admittance matrix $Y \!$ is a convenient way to encapsulate the complexity of series admittances ($y$), shunt admittances ($y^\text{Sh}$), and transformer ratios ($a$). However, because each diagonal element $Y_{ii}$ is a sum over every $i$-connected branch, the bus admittance matrix does not allow us to calculate individual branch current and power values ($I_{ik}$ and $S_{ik}$). This can be overcome using the bus admittance matrix with a "branch-from-bus" admittance matrix $Y^\text{f}$ and a "branch-to-bus" admittance matrix $Y^\text{t} \!$. Both of these matrices are sparse matrices of dimension $N \! \times \! L$, where $N$ is the number of buses and $L$ is the number of branches; both matrices have a row for each branch and a column for each bus. For a branch $l$ from bus $i$ to bus $k$, row $l$ of each matrix has nonzero entries only in columns $i$ and $k$:
+The bus admittance matrix $Y \!$ is a convenient way to encapsulate the complexity of series admittances ($y$), shunt admittances ($y^\text{Sh}$), and transformer ratios ($a$). However, because each diagonal element $Y_{\! ii}$ is a sum over every $i$-connected branch, the bus admittance matrix does not allow us to calculate individual branch current and power values ($I_{ik}$ and $S_{ik}$). This can be overcome using the bus admittance matrix with a "branch-from-bus" admittance matrix $Y^\text{f}$ and a "branch-to-bus" admittance matrix $Y^\text{t} \!$. Both of these matrices are sparse matrices of dimension $N \! \times \! L$, where $N$ is the number of buses and $L$ is the number of branches; both matrices have a row for each branch and a column for each bus. For a branch $l$ from bus $i$ to bus $k$, row $l$ of each matrix has nonzero entries only in columns $i$ and $k$:
 
 $$
 \begin{aligned}
