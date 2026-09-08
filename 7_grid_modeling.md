@@ -457,19 +457,17 @@ $$
 
 <!-- ### The Security-Constrained Optimal Power Flow (SCOPF) Problem -->
 
-## Linear Optimal Power Flow
+## The Linear Optimal Power Flow (LOPF) Problem
 
-The power flow equations {ref}`eq_pf` contain quadratic terms multiplied with trigonometric functions. Branch flow constraint {eq}`pf_criterion_2` is even more complicated. The power flow equations being nonlinear is easy enough when solving them as a system of equations, and the branch flow constraint being nonlinear is easy enough when evaluating the power flow solution. However, when used as constraints in OPF, the nonlinearity makes the optimization problem significantly more difficult.
+The power flow equations {ref}`eq_pf` contain quadratic terms multiplied with trigonometric functions. Branch flow constraint {eq}`pf_criterion_2` is even more complicated. The power flow equations being nonlinear is easy enough when solving them as a system of equations, and the branch flow constraint being nonlinear is easy enough when evaluating the power flow solution. However, when used as constraints in OPF, the nonlinearity makes the optimization problem significantly more difficult. To simplify (linearize) the power flow equations and branch flow constraint, thereby making the optimization problem easier, the following assumptions are applied:
 
-Approximations:
+1. Series resistance is negligible compared to series reactance: $g_{ik} \approx 0$ and $y_{ik} \approx j b_{ik}$. This approximation is reasonable for transmission lines and, combined with approximation 2, assumes a lossless network.
+2. Shunt conductance and susceptance are negligible: $g_{ik}^\text{Sh} \approx b_{ik}^\text{Sh} \approx 0$.
+3. Turns ratios are approximately nominal: $|a_{ik}| \approx 1$.
+4. Voltage angle differences and transformer phase shifts are small: $\sin(\delta_i - \delta_k - \varphi_{ik}) \approx \delta_i - \delta_k - \varphi_{ik}$ and $\cos(\delta_i - \delta_k) \approx 1$.
+5. Voltage magnitudes are approximately nominal: $|V_{\! i}| \approx |V_k| \approx 1 \ \mathrm{pu}$ everywhere. This supports approximation 3 and holds for a lossless network.
 
-1. Series resistance is negligible compared to series reactance: $g_{ik} \approx 0$ and $y_{ik} \approx j b_{ik}$.
-2. Negligible shunt conductance and susceptance: $g_{ik}^\text{Sh} \approx b_{ik}^\text{Sh} \approx 0$.
-3. Nominal turns ratios: $|a_{ik}| = 1$.
-5. Voltage angle differences and transformer phase shifts are small: $\sin(\delta_i - \delta_k - \varphi_{ik}) \approx \delta_i - \delta_k - \varphi_{ik}$ and $\cos(\delta_i - \delta_k) \approx 1$.
-4. Voltage magnitudes are approximately nominal: $|V_{\! i}| \approx |V_k| \approx 1 \ \mathrm{pu}$ everywhere.
-
-To derive the linear form of power flow equations {ref}`eq_pf`, we start over by applying approximations 1&ndash;3 to equation {ref}`eq_sums_split` as follows. We will apply approximations 4 and 5 later.
+We start by applying approximations 1&ndash;3 to equation {ref}`eq_sums_split` as follows. We will apply approximations 4 and 5 later.
 
 $$
 \begin{aligned}
@@ -549,15 +547,23 @@ $$
 \end{aligned}
 $$
 
-Once again, we sum the power flowing out of every bus $i$:
+Now, when we once again sum the power flowing out of every bus $i$, it includes only active power:
 
 $$
 P_i = \!\!\! \sum_{k \in \mathcal{N} \! , \, k \neq i} \!\!\!\! P_{ik} = - \!\!\! \sum_{k \in \mathcal{N} \! , \, k \neq i} \!\!\!\! B_{ik} (\delta_i - \delta_k - \Phi_{ik})
 $$ (eq_pf_linear)
 
-This is the linear power flow equation, which applies to every bus $i$. The linear power flow equation is much simpler than the original, nonlinear power flow equation due to the approximations applied.
+This is the linear power flow equation, which applies to every bus $i$ and is much simpler than the original (nonlinear) power flow equation due to the approximations applied. Because the linear power flow equation approximates voltage magnitudes as nominal and assumes zero reactive power, there is no differentiating between PQ and PV buses. Furthermore, the lack of reactive power allows us to simplify the branch flow constraint {ref}`pf_criterion_2`:
 
+$$
+- P_l^\text{max} \leq P_{ik} \leq P_l^\text{max} \ \forall \ (i, k) \in \mathcal{L}
+$$
+
+When OPF uses the linear power flow equation and the correspondingly simplified branch flow constraint, it is known as *linear optimal power flow (LOPF)*.
+
+```{note}
 Equation {ref}`eq_pf_linear` is analogous to DC circuit analysis using KCL ($I_i = \Sigma (V_i - V_k) / r_{ik}$) as shown in {ref}`tab_7_2`.
+```
 
 ```{table}
 :width: 100%
@@ -588,6 +594,9 @@ We've introduced many concepts; {ref}`fig_7_7` provides a summary of these conce
 
 This chapter's concepts and how they inter-relate.
 ```
+
+<!-- LATEX_ONLY_EMPTY_PARAGRAPH -->
+<!-- LATEX_ONLY_EMPTY_PARAGRAPH -->
 
 (branch_admittance_matrices)=
 ## Appendix: Branch-From-Bus and Branch-To-Bus Admittance Matrices
