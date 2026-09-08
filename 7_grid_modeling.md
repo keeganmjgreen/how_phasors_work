@@ -574,13 +574,6 @@ Equation {ref}`eq_pf_linear` is analogous to DC circuit analysis using KCL ($I_i
 Linear power flow is analogous to DC circuit analysis.
 ```
 
-<!-- ```{figure} img/fig_7_6.png
-:width: 64%
-:label: fig_7_6
-
-The branch model (a) used in linear power flow is analogous to DC branch model (b).
-``` -->
-
 <!-- Undoing any assumption -> nonlinearity? -->
 <!-- KCL/KVL -->
 <!-- Control -->
